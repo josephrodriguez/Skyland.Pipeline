@@ -16,6 +16,13 @@ namespace Skyland.Pipeline
             _pipeline = new DefaultPipeline<TIn, TOut>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TJobIn"></typeparam>
+        /// <typeparam name="TJobOut"></typeparam>
+        /// <param name="job"></param>
+        /// <returns></returns>
         public PipelineBuilder<TIn, TOut> Register<TJobIn, TJobOut>(IPipelineJob<TJobIn, TJobOut> job)
         {
             if(job == null)
@@ -34,6 +41,13 @@ namespace Skyland.Pipeline
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TJobInput"></typeparam>
+        /// <typeparam name="TJobOutput"></typeparam>
+        /// <param name="function"></param>
+        /// <returns></returns>
         public PipelineBuilder<TIn, TOut> Register<TJobInput, TJobOutput>(Func<TJobInput, TJobOutput> function)
         {
             if (function == null)
@@ -46,6 +60,9 @@ namespace Skyland.Pipeline
 
         public IPipeline<TIn, TOut> Build()
         {
+            if(_pipeline.Count == 0)
+                throw new Exception("There is not registered pipeline job.");
+
             if (_pipeline.OutputType != typeof(TOut))
                 throw new Exception("Outout type of current pipeline don´t match with declared pipeline.");
 
