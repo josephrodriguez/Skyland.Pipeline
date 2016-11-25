@@ -5,6 +5,12 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skyland.Pipeline", "src\Skyland.Pipeline\Skyland.Pipeline.csproj", "{B9BA2BC0-127E-4CEF-B425-052E58ACB466}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{209DBB99-BC23-4567-82DD-CD77FC15AA58}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D37DE1B2-ECB8-4F2A-A9B0-E1F4B4EAEE31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skyland.Pipeline.UnitTest", "test\Skyland.Pipeline.UnitTest\Skyland.Pipeline.UnitTest.csproj", "{67CB826A-8029-4CB1-A47D-4B42A7BAE1CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +21,16 @@ Global
 		{B9BA2BC0-127E-4CEF-B425-052E58ACB466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9BA2BC0-127E-4CEF-B425-052E58ACB466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9BA2BC0-127E-4CEF-B425-052E58ACB466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67CB826A-8029-4CB1-A47D-4B42A7BAE1CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67CB826A-8029-4CB1-A47D-4B42A7BAE1CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67CB826A-8029-4CB1-A47D-4B42A7BAE1CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67CB826A-8029-4CB1-A47D-4B42A7BAE1CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B9BA2BC0-127E-4CEF-B425-052E58ACB466} = {209DBB99-BC23-4567-82DD-CD77FC15AA58}
+		{67CB826A-8029-4CB1-A47D-4B42A7BAE1CD} = {D37DE1B2-ECB8-4F2A-A9B0-E1F4B4EAEE31}
 	EndGlobalSection
 EndGlobal
