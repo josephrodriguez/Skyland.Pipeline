@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Skyland.Pipeline.Impl
 {
-    internal class DefaultPipeline<TIn, TOut> : IPipeline<TIn, TOut>
+    internal class DefaultPipeline<TInput, TOutput> : IPipeline<TInput, TOutput>
     {
         private readonly IList<object> _jobs;
 
@@ -43,12 +43,29 @@ namespace Skyland.Pipeline.Impl
             }
         }
 
-        public TOut Execute(TIn input)
+        public TOutput Execute(TInput input)
         {
-            throw new NotImplementedException();
+            object current = input;
+
+            foreach (var job in _jobs)
+            {
+                var jobType = job.GetType();
+
+                var jobInterface = jobType
+                    .GetInterfaces()
+                    .Single(i => i.GetGenericTypeDefinition() == typeof(IPipelineJob<,>));
+
+                var invokableMethod = jobInterface.GetMethods().FirstOrDefault();
+                if (invokableMethod == null)
+                    throw new MissingMethodException("Current job don´t contain expected method implementation.");
+
+                current = invokableMethod.Invoke(job, new[] { current });
+            }
+
+            return (TOutput) current;
         }
 
-        public void RegisterJob<TJobIn, TJobOut>(IPipelineJob<TJobIn, TJobOut> job)
+        internal void RegisterJob<TJobIn, TJobOut>(IPipelineJob<TJobIn, TJobOut> job)
         {
             if (job == null)
                 throw new ArgumentNullException("job");
