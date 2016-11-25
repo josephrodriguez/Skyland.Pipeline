@@ -34,6 +34,16 @@ namespace Skyland.Pipeline
             return this;
         }
 
+        public PipelineBuilder<TIn, TOut> Register<TJobInput, TJobOutput>(Func<TJobInput, TJobOutput> function)
+        {
+            if (function == null)
+                throw new NullReferenceException("Inline function definition.");
+
+            var inlineJob = new InlineJob<TJobInput, TJobOutput>(function);
+
+            return Register(inlineJob);
+;        }
+
         public IPipeline<TIn, TOut> Build()
         {
             if (_pipeline.OutputType != typeof(TOut))
