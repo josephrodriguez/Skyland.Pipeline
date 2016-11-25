@@ -1,0 +1,14 @@
+#packages
+packages/
+
+#unneeded VS files
+*.suo
+*.user
+*.orig
+
+#bin and obj folders
+bin/
+obj/
+
+#Visual Studio 2015 folder
+.vs/
