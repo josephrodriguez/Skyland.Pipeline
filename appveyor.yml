@@ -13,3 +13,8 @@ skip_tags: true
 
 # Start builds on tags only (GitHub and BitBucket)
 skip_non_tags: true
+
+
+build:
+  # MSBuild verbosity level
+  verbosity: minimal
