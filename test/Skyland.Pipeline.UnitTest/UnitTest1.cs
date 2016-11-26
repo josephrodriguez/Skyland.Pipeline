@@ -12,7 +12,10 @@ namespace Skyland.Pipeline.UnitTest
             var pipeline = new PipelineBuilder<string, int>()
                 .Register(new Job1())
                 .Register(new Job2())
+                .Register<int, int>(i => i%2)
                 .Build();
+
+            var result = pipeline.Execute("   123   ");
         }
     }
 

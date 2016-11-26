@@ -1,0 +1,15 @@
+version: 0.0.1.{build}
+
+init:
+    - git config --global core.autocrlf true
+    
+branches:
+  only:
+    - master
+    - dev
+    - /^(.*\/)?ci-.*$/
+# Do not build on tags (GitHub and BitBucket)
+skip_tags: true
+
+# Start builds on tags only (GitHub and BitBucket)
+skip_non_tags: true
