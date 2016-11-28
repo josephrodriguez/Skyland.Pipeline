@@ -20,7 +20,11 @@ build:
 
 before_build:
  - nuget restore "Skyland.Pipeline.sln"
- 
+
+#after_build:
+# - nuget pack AppVeyor.Tools.SecureFile\secure-file.nuspec -Version %appveyor_build_version%
+# - appveyor PushArtifact secure-file.%appveyor_build_version%.nupkg
+
 nuget:
   account_feed: true
   project_feed: true
@@ -30,6 +34,7 @@ deploy:
   server: https://ci.appveyor.com/nuget/josemiguelrodriguezg-eho7mf708t5v/api/v2/package
   api_key:
     secure: Hy5t86+y81dw7mFq3nXivEFNWmhBvE1kKVqMrn2D5FY=
-  skip_symbols: false
-  symbol_server: https://ci.appveyor.com/nuget/josemiguelrodriguezg-eho7mf708t5v/api/v2/package
-  artifact: /.*\.nupkg/
+  skip_symbols: true
+
+artifacts:
+    - path: '*.nupkg'
