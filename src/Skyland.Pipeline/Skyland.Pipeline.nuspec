@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Skyland.Pipeline</id>
+    <version>0.0.1.0</version>
+    <authors>Joseph Rodriguez</authors>
+    <owners>Joseph Rodriguez</owners>
+    <projectUrl>https://github.com/josephrodriguez/Skyland.Pipeline</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>.NET  implementation of Chain of Responsability pattern</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags></tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
