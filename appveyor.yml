@@ -6,8 +6,6 @@ init:
 branches:
   only:
     - master
-    - dev
-    - /^(.*\/)?ci-.*$/
     
 # Do not build on tags (GitHub and BitBucket)
 skip_tags: true
@@ -15,7 +13,20 @@ skip_tags: true
 # Start builds on tags only (GitHub and BitBucket)
 skip_non_tags: true
 
-
 build:
   # MSBuild verbosity level
   verbosity: minimal
+  
+nuget:
+  account_feed: true
+  project_feed: true
+
+deploy:
+  provider: NuGet
+  server: https://ci.appveyor.com/nuget/josemiguelrodriguezg-eho7mf708t5v/api/v2/package
+  api_key:
+    secure: Hy5t86+y81dw7mFq3nXivEFNWmhBvE1kKVqMrn2D5FY=
+  skip_symbols: false
+  symbol_server: https://ci.appveyor.com/nuget/josemiguelrodriguezg-eho7mf708t5v/api/v2/package
+  artifact: /.*\.nupkg/
+
