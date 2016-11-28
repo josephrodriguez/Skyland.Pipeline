@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Skyland.Pipeline.UnitTest")]
+[assembly: AssemblyTitle("Skyland.Pipeline.NUnit")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Skyland.Pipeline.UnitTest")]
+[assembly: AssemblyProduct("Skyland.Pipeline.NUnit")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("67cb826a-8029-4cb1-a47d-4b42a7bae1cd")]
+[assembly: Guid("d8c1d553-a26a-4dd9-b10b-035c302508aa")]
 
 // Version information for an assembly consists of the following four values:
 //
