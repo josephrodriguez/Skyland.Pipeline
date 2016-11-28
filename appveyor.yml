@@ -21,9 +21,9 @@ build:
 before_build:
  - nuget restore "Skyland.Pipeline.sln"
 
-#after_build:
-# - nuget pack AppVeyor.Tools.SecureFile\secure-file.nuspec -Version %appveyor_build_version%
-# - appveyor PushArtifact secure-file.%appveyor_build_version%.nupkg
+after_build:
+ - nuget pack AppVeyor.Tools.SecureFile\secure-file.nuspec -Version %appveyor_build_version%
+ - appveyor PushArtifact secure-file.%appveyor_build_version%.nupkg
 
 nuget:
   account_feed: true
