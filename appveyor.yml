@@ -6,6 +6,7 @@ init:
 branches:
   only:
     - master
+    - dev
     
 # Do not build on tags (GitHub and BitBucket)
 skip_tags: true
@@ -16,7 +17,10 @@ skip_non_tags: true
 build:
   # MSBuild verbosity level
   verbosity: minimal
-  
+
+before_build:
+ - nuget restore "Skyland.Pipeline.sln"
+ 
 nuget:
   account_feed: true
   project_feed: true
@@ -29,4 +33,3 @@ deploy:
   skip_symbols: false
   symbol_server: https://ci.appveyor.com/nuget/josemiguelrodriguezg-eho7mf708t5v/api/v2/package
   artifact: /.*\.nupkg/
-
