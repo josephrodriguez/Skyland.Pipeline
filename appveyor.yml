@@ -1,7 +1,13 @@
 version: 0.0.1.{build}
 
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
 init:
-    - git config --global core.autocrlf true
+ - git config --global core.autocrlf true
+
+# Build worker image (VM template)
+image: Visual Studio 2015 
   
 branches:
   only:
@@ -22,17 +28,41 @@ before_build:
 after_build:
  - ps: nuget pack .\src\Skyland.Pipeline\Skyland.Pipeline.nuspec
 
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
 artifacts:
  - path: '**\*.nupkg'
    name: Nuget
-   
-deploy:
-  provider: NuGet
-  server: https://ci.appveyor.com/nuget/josemiguelrodriguezg-eho7mf708t5v/api/v2/package
-  api_key:
-    secure: Hy5t86+y81dw7mFq3nXivEFNWmhBvE1kKVqMrn2D5FY=
-  skip_symbols: true
   
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#  
+
+deploy:
+
+  - provider: NuGet
+    name: nuget_release
+    api_key:
+      secure: Hy5t86+y81dw7mFq3nXivEFNWmhBvE1kKVqMrn2D5FY=
+    skip_symbols: false
+    artifact: '**\*.nupkg'
+    on:
+      branch: master                # release from master branch only
+      appveyor_repo_tag: true       # deploy on tag push only
+      
+  - provider: NuGet
+    name: nuget_prerelease
+    server: https://ci.appveyor.com/nuget/josemiguelrodriguezg-eho7mf708t5v/api/v2/package
+    api_key:
+      secure: Hy5t86+y81dw7mFq3nXivEFNWmhBvE1kKVqMrn2D5FY=
+    skip_symbols: false
+    artifact: '**\*.nupkg'
+    on:
+      branch: dev                   # release from master branch only
+
+      
 # build cache to preserve files/folders between builds
 cache:
   - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
