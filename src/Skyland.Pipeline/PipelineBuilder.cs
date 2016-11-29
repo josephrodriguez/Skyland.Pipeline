@@ -1,6 +1,7 @@
 ﻿#region using
 
 using System;
+using Skyland.Pipeline.Handler;
 using Skyland.Pipeline.Impl;
 
 #endregion
@@ -57,6 +58,12 @@ namespace Skyland.Pipeline
 
             return Register(inlineJob);
 ;        }
+
+        public PipelineBuilder<TIn, TOut> OnError(Action<object, Exception> action)
+        {
+            _pipeline.OnError += new PipelineErrorHandler(action);
+            return this;
+        }
 
         public IPipeline<TIn, TOut> Build()
         {

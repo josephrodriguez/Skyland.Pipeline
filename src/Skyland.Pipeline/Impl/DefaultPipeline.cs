@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Skyland.Pipeline.Handler;
 
 #endregion
 
@@ -11,6 +12,12 @@ namespace Skyland.Pipeline.Impl
     internal class DefaultPipeline<TInput, TOutput> : IPipeline<TInput, TOutput>
     {
         private readonly IList<object> _jobs;
+
+        #region Events
+
+        public event PipelineErrorHandler OnError;
+
+        #endregion
 
         public DefaultPipeline() {
             _jobs = new List<object>();
@@ -59,7 +66,16 @@ namespace Skyland.Pipeline.Impl
                 if (invokableMethod == null)
                     throw new MissingMethodException("Current job don´t contain expected method implementation.");
 
-                current = invokableMethod.Invoke(job, new[] { current });
+                try {
+                    current = invokableMethod.Invoke(job, new[] { current });
+                }
+                catch (Exception exception)
+                {
+                    if (OnError != null)
+                        OnError(job, exception);
+                    else
+                        throw;
+                }
             }
 
             return (TOutput) current;

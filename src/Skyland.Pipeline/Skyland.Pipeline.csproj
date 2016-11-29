@@ -35,6 +35,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handler\PipelineErrorHandler.cs" />
     <Compile Include="Impl\DefaultPipeline.cs" />
     <Compile Include="Impl\InlineJob.cs" />
     <Compile Include="IPipeline.cs" />
