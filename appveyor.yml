@@ -2,33 +2,30 @@ version: 0.0.1.{build}
 
 init:
     - git config --global core.autocrlf true
-    
+  
 branches:
   only:
     - master
     - dev
-    
-# Do not build on tags (GitHub and BitBucket)
-skip_tags: true
 
-# Start builds on tags only (GitHub and BitBucket)
-skip_non_tags: true
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
 
 build:
-  # MSBuild verbosity level
-  verbosity: minimal
+  publish_nuget: true               # package projects with .nuspec files and push to artifacts
+  publish_nuget_symbols: false      # generate and publish NuGet symbol packages
+  verbosity: minimal                # MSBuild verbosity level
 
 before_build:
- - nuget restore "Skyland.Pipeline.sln"
+ - ps: nuget restore Skyland.Pipeline.sln
 
 after_build:
- - nuget pack AppVeyor.Tools.SecureFile\secure-file.nuspec -Version %appveyor_build_version%
- - appveyor PushArtifact secure-file.%appveyor_build_version%.nupkg
+ - ps: nuget pack .\src\Skyland.Pipeline\Skyland.Pipeline.nuspec
 
-nuget:
-  account_feed: true
-  project_feed: true
-
+artifacts:
+ - path: '**\*.nupkg'
+   name: Nuget
+   
 deploy:
   provider: NuGet
   server: https://ci.appveyor.com/nuget/josemiguelrodriguezg-eho7mf708t5v/api/v2/package
@@ -36,5 +33,3 @@ deploy:
     secure: Hy5t86+y81dw7mFq3nXivEFNWmhBvE1kKVqMrn2D5FY=
   skip_symbols: true
 
-artifacts:
-    - path: '**\*.nupkg'
