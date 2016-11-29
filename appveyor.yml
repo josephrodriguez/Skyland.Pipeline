@@ -32,4 +32,9 @@ deploy:
   api_key:
     secure: Hy5t86+y81dw7mFq3nXivEFNWmhBvE1kKVqMrn2D5FY=
   skip_symbols: true
+  
+# build cache to preserve files/folders between builds
+cache:
+  - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - '%LocalAppData%\NuGet\Cache'
 
