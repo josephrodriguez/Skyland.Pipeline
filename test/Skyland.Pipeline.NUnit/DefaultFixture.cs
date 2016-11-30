@@ -14,6 +14,7 @@ namespace Skyland.Pipeline.NUnit
         public void CreateInlineJob()
         {
             var pipeline = new PipelineBuilder<string, int>()
+                .Register<string, string>(s => s.Trim())
                 .Register<string, int>(int.Parse)
                 .Register<int, int>(i => i%2)
                 .OnError((sender, exception) => Console.WriteLine(exception))
