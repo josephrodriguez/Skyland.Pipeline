@@ -20,7 +20,7 @@ namespace Skyland.Pipeline.NUnit
                 .OnError((sender, exception) => Console.WriteLine(exception))
                 .Build();
 
-            var result = pipeline.Execute(" 123");
+            int result = pipeline.Execute(" 123  ");
         }
         
     }
