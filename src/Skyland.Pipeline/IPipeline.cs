@@ -10,11 +10,5 @@ namespace Skyland.Pipeline
         TOut Execute(TIn input);
 
         #endregion
-
-        #region Events
-
-        event PipelineErrorHandler OnError;
-
-        #endregion
     }
 }
