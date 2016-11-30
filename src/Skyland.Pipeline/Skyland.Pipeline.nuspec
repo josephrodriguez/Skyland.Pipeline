@@ -7,7 +7,7 @@
     <owners>Joseph Rodriguez</owners>
     <projectUrl>https://github.com/josephrodriguez/Skyland.Pipeline</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>.NET  implementation of Chain of Responsability pattern</description>
+    <description>Skyland Pipeline is a C # implementation of the Chain of Responsibility pattern.</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags></tags>
