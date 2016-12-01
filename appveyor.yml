@@ -35,7 +35,6 @@ deploy:
     api_key:
       secure: 7oL6tDCXdSrN6tCZjHmcyjbk7WwcMf8BgfUGZoWsQB0ZD4AZvJ0v9ensmrBujoex
     skip_symbols: false
-    artifact: '**\*.nupkg'
     on:
       appveyor_repo_tag: true       # deploy on tag push only
       
@@ -45,7 +44,6 @@ deploy:
     api_key:
       secure: Hy5t86+y81dw7mFq3nXivEFNWmhBvE1kKVqMrn2D5FY=
     skip_symbols: false
-    artifact: '**\*.nupkg'
     on:
       branch: dev                   # release from dev branch only
 

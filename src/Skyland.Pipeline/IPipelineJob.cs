@@ -1,7 +1,7 @@
 ﻿namespace Skyland.Pipeline
 {
-    public interface IPipelineJob<in TIn, out TOut>
+    public interface IPipelineJob<in TInput, out TOutput>
     {
-        TOut Process(TIn input);
+        TOutput Process(TInput input);
     }
 }

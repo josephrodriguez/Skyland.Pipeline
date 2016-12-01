@@ -11,7 +11,7 @@ namespace Skyland.Pipeline.NUnit
     public class DefaultFixture
     {
         [Test]
-        public void CreateInlineJob()
+        public void CreateInlinePipelineJob()
         {
             var pipeline = new PipelineBuilder<string, int>()
                 .Register<string, string>(s => s.Trim())
@@ -20,8 +20,10 @@ namespace Skyland.Pipeline.NUnit
                 .OnError((sender, exception) => Console.WriteLine(exception))
                 .Build();
 
-            int result = pipeline.Execute(" 123  ");
+            var result = pipeline.Execute(" 123  ");
+
+            Assert.AreEqual(result, 1);
         }
-        
+
     }
 }
