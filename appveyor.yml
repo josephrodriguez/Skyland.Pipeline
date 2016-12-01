@@ -9,11 +9,6 @@ init:
 # Build worker image (VM template)
 image: Visual Studio 2015 
  
-branches:
-  only:
-    - master
-    - dev
-
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
@@ -28,14 +23,7 @@ before_build:
 after_build:
  - ps: nuget pack .\src\Skyland.Pipeline\Skyland.Pipeline.nuspec
 
-
-#---------------------------------#
-#      artifacts configuration    #
-#---------------------------------#
-artifacts:
- - path: '**\*.nupkg'
-   name: Nuget
-  
+ 
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#  
@@ -48,10 +36,7 @@ deploy:
       secure: 7oL6tDCXdSrN6tCZjHmcyjbk7WwcMf8BgfUGZoWsQB0ZD4AZvJ0v9ensmrBujoex
     skip_symbols: false
     artifact: '**\*.nupkg'
-    draft: false
-    prerelease: false
     on:
-      branch: master                # release from master branch only
       appveyor_repo_tag: true       # deploy on tag push only
       
   - provider: NuGet
@@ -62,7 +47,7 @@ deploy:
     skip_symbols: false
     artifact: '**\*.nupkg'
     on:
-      branch: dev                   # release from master branch only
+      branch: dev                   # release from dev branch only
 
       
 # build cache to preserve files/folders between builds
