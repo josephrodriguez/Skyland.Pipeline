@@ -8,7 +8,7 @@ init:
 
 # Build worker image (VM template)
 image: Visual Studio 2015 
-  
+ 
 branches:
   only:
     - master
@@ -48,6 +48,8 @@ deploy:
       secure: 7oL6tDCXdSrN6tCZjHmcyjbk7WwcMf8BgfUGZoWsQB0ZD4AZvJ0v9ensmrBujoex
     skip_symbols: false
     artifact: '**\*.nupkg'
+    draft: false
+    prerelease: false
     on:
       branch: master                # release from master branch only
       appveyor_repo_tag: true       # deploy on tag push only
