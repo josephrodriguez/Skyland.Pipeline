@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Skyland.Pipeline.Handler;
 
 #endregion
@@ -71,10 +72,13 @@ namespace Skyland.Pipeline.Impl
                 }
                 catch (Exception exception)
                 {
+                    //TargetInvocationException is handled here, Base exception must be propagated
+                    var e = exception.GetBaseException();
+
                     if (OnError != null)
                         OnError(job, exception);
                     else
-                        throw;
+                        throw exception.GetBaseException();
                 }
             }
 

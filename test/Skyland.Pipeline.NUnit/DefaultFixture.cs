@@ -1,6 +1,7 @@
 ﻿#region using
 
 using System;
+using System.Reflection;
 using NUnit.Framework;
 
 #endregion
@@ -11,19 +12,42 @@ namespace Skyland.Pipeline.NUnit
     public class DefaultFixture
     {
         [Test]
-        public void CreateInlinePipelineJob()
+        public void CreatePipelineWithInlineJobs()
         {
-            var pipeline = new PipelineBuilder<string, int>()
+            var evenPipeline = new PipelineBuilder<string, bool>()
                 .Register<string, string>(s => s.Trim())
                 .Register<string, int>(int.Parse)
-                .Register<int, int>(i => i%2)
-                .OnError((sender, exception) => Console.WriteLine(exception))
+                .Register<int, bool>(i => i % 2 == 0)
                 .Build();
 
-            var result = pipeline.Execute(" 123  ");
+            var result = evenPipeline.Execute(" 56  ");
 
-            Assert.AreEqual(result, 1);
+            Assert.IsTrue(result);
         }
 
+        [Test]
+        public void HandleExceptionOnPipeline()
+        {
+            var handledException = false;
+
+            var pipeline = new PipelineBuilder<int, int>()
+                .Register<int, int>(s => { throw new NotImplementedException(); })
+                .OnError((sender, exception) => handledException = true)
+                .Build();
+
+            var result = pipeline.Execute(0);
+
+            Assert.IsTrue(handledException);
+        }
+
+        [Test]
+        public void UnhandledException()
+        {
+            var pipeline = new PipelineBuilder<int, int>()
+                .Register<int, int>(s => { throw new NotImplementedException(); })
+                .Build();
+
+            Assert.Throws<NotImplementedException>(() => pipeline.Execute(0));
+        }
     }
 }
