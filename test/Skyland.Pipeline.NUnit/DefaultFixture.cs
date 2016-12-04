@@ -1,6 +1,9 @@
 ﻿#region using
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -15,9 +18,18 @@ namespace Skyland.Pipeline.NUnit
         public void CreatePipelineWithInlineJobs()
         {
             var evenPipeline = new PipelineBuilder<string, bool>()
-                .Register<string, string>(s => s.Trim())
-                .Register<string, int>(int.Parse)
-                .Register<int, bool>(i => i % 2 == 0)
+                .Register(
+                    Component
+                        .ForJob<string, string>(s => s.Trim())
+                        .WithFilter(string.IsNullOrEmpty)
+                        .WithFilter(s => s.Length == 1),
+                    Component
+                        .ForJob<string, int>(int.Parse)
+                        .WithHandler(Console.WriteLine)
+                        .WithHandler(i => Trace.WriteLine(i)),
+                    Component
+                        .ForJob<int, bool>(i => i % 2 == 0)
+                        )
                 .Build();
 
             var result = evenPipeline.Execute(" 56  ");
@@ -31,11 +43,11 @@ namespace Skyland.Pipeline.NUnit
             var handledException = false;
 
             var pipeline = new PipelineBuilder<int, int>()
-                .Register<int, int>(s => { throw new NotImplementedException(); })
+                .Register(Component.ForJob<int, int>(s => { throw new NotImplementedException(); }))
                 .OnError((sender, exception) => handledException = true)
                 .Build();
 
-            var result = pipeline.Execute(0);
+            pipeline.Execute(0);
 
             Assert.IsTrue(handledException);
         }
@@ -44,7 +56,7 @@ namespace Skyland.Pipeline.NUnit
         public void UnhandledException()
         {
             var pipeline = new PipelineBuilder<int, int>()
-                .Register<int, int>(s => { throw new NotImplementedException(); })
+                .Register(Component.ForJob<int, int>(s => { throw new NotImplementedException(); }))
                 .Build();
 
             Assert.Throws<NotImplementedException>(() => pipeline.Execute(0));

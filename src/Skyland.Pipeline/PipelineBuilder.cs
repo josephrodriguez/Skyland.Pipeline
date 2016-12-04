@@ -1,6 +1,8 @@
 ﻿#region using
 
 using System;
+using System.Linq;
+using System.Reflection;
 using Skyland.Pipeline.Handler;
 using Skyland.Pipeline.Impl;
 
@@ -8,69 +10,86 @@ using Skyland.Pipeline.Impl;
 
 namespace Skyland.Pipeline
 {
-    public class PipelineBuilder<TIn, TOut>
+    public class PipelineBuilder<TInput, TOutput>
     {
-        private readonly DefaultPipeline<TIn, TOut> _pipeline;
+        private readonly DefaultPipeline<TInput, TOutput> _pipeline;
 
         public PipelineBuilder()
         {
-            _pipeline = new DefaultPipeline<TIn, TOut>();
+            _pipeline = new DefaultPipeline<TInput, TOutput>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TJobIn"></typeparam>
-        /// <typeparam name="TJobOut"></typeparam>
-        /// <param name="job"></param>
-        /// <returns></returns>
-        public PipelineBuilder<TIn, TOut> Register<TJobIn, TJobOut>(IPipelineJob<TJobIn, TJobOut> job)
+        public PipelineBuilder<TInput, TOutput> Register<TIn, TOut>(StageComponent<TIn, TOut> component)
         {
-            if(job == null)
-                throw new NullReferenceException("Null reference pipeline job instance.");
+            if(component == null)
+                throw new ArgumentNullException("component");
 
             //Input type must match with first input job
-            if (_pipeline.Count == 0 && typeof(TJobIn) != typeof(TIn))
+            if (_pipeline.Count == 0 && typeof(TIn) != typeof(TInput))
                 throw new Exception("Input of job is not the same of declared pipeline.");
 
             //Pipeline output type must match with current job input
-            if (_pipeline.Count > 0 && _pipeline.OutputType != typeof(TJobIn))
+            if (_pipeline.Count > 0 && _pipeline.OutputType != typeof(TIn))
                 throw new Exception("Input of current job don´t match with previous job output.");
 
-            _pipeline.RegisterJob(job);
+            var stage = component.GetStage();
+
+            _pipeline.RegisterStage(stage);
 
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TJobInput"></typeparam>
-        /// <typeparam name="TJobOutput"></typeparam>
-        /// <param name="function"></param>
-        /// <returns></returns>
-        public PipelineBuilder<TIn, TOut> Register<TJobInput, TJobOutput>(Func<TJobInput, TJobOutput> function)
+        public PipelineBuilder<TInput, TOutput> Register(params object[] components)
         {
-            if (function == null)
-                throw new NullReferenceException("Inline function definition.");
+            if(components == null)
+                throw new ArgumentNullException("components");
 
-            var inlineJob = new InlineJob<TJobInput, TJobOutput>(function);
+            if (components.Length == 0)
+                return this;
 
-            return Register(inlineJob);
-;        }
+            var methodName = MethodBase.GetCurrentMethod().Name;
 
-        public PipelineBuilder<TIn, TOut> OnError(Action<object, Exception> action)
+            var methodInfo =
+                GetType()
+                    .GetMethods()
+                    .FirstOrDefault(m => m.Name == methodName && m.IsGenericMethod);
+
+            if(methodInfo == null)
+                throw new MissingMethodException("");
+
+            foreach (var component in components)
+            {
+                if(component == null)
+                    throw new NullReferenceException("Declared stage component is null.");
+
+                var genericType = component.GetType().GetGenericTypeDefinition();
+                if(genericType == null)
+                    throw new InvalidOperationException("Stage component is not generic type.");
+
+                if (genericType != typeof (StageComponent<,>))
+                    throw new InvalidOperationException("Specific component don´t implement a required type.");
+
+                var arguments = component.GetType().GetGenericArguments();
+
+                var genericMethod = methodInfo.MakeGenericMethod(arguments[0], arguments[1]);
+                genericMethod.Invoke(this, new[] {component});
+            }
+
+            return this;
+        }
+
+        public PipelineBuilder<TInput, TOutput> OnError(Action<object, Exception> action)
         {
             _pipeline.OnError += new PipelineErrorHandler(action);
             return this;
         }
 
-        public IPipeline<TIn, TOut> Build()
+        public IPipeline<TInput, TOutput> Build()
         {
             if(_pipeline.Count == 0)
                 throw new Exception("There is not registered pipeline job.");
 
-            if (_pipeline.OutputType != typeof(TOut))
+            if (_pipeline.OutputType != typeof(TOutput))
                 throw new Exception("Outout type of current pipeline don´t match with declared pipeline.");
 
             return _pipeline;

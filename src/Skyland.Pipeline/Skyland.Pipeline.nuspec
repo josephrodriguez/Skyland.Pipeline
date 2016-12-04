@@ -10,7 +10,7 @@
     <description>Skyland Pipeline is a C # implementation of the Chain of Responsibility pattern.</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2016</copyright>
-    <tags></tags>
+    <tags>pipeline</tags>
     <dependencies>
     </dependencies>
   </metadata>

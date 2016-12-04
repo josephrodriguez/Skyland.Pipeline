@@ -7,6 +7,11 @@ namespace Skyland.Pipeline
     {
         #region Methods
 
+        /// <summary>
+        /// Execute in current thread the parameter on inline jobs
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         TOut Execute(TIn input);
 
         #endregion

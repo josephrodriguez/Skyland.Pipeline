@@ -12,42 +12,29 @@ namespace Skyland.Pipeline.Impl
 {
     internal class DefaultPipeline<TInput, TOutput> : IPipeline<TInput, TOutput>
     {
-        private readonly IList<object> _jobs;
+        private readonly IList<object> _stages;
 
         #region Events
 
-        public event PipelineErrorHandler OnError;
+        internal event PipelineErrorHandler OnError;
 
         #endregion
 
         public DefaultPipeline() {
-            _jobs = new List<object>();
+            _stages = new List<object>();
         }
 
         public int Count {
-            get { return _jobs.Count; } 
+            get { return _stages.Count; } 
         }
 
         public Type OutputType
         {
             get
             {
-                var lastJob = _jobs.LastOrDefault();
-                if(lastJob == null)
-                    return null;
+                var stage = _stages.LastOrDefault();
 
-                var jobInterface = lastJob.GetType()
-                    .GetInterfaces()
-                    .Single(
-                        i => 
-                            i.GetGenericTypeDefinition() == typeof(IPipelineJob<,>));
-
-                if(jobInterface == null)
-                    throw new Exception("Job instance don´t implement required interface.");
-
-                var arguments = jobInterface.GetGenericArguments();
-
-                return arguments.Last();
+                return stage?.GetType().GetGenericArguments().Last();
             }
         }
 
@@ -55,28 +42,22 @@ namespace Skyland.Pipeline.Impl
         {
             object current = input;
 
-            foreach (var job in _jobs)
+            foreach (var stage in _stages)
             {
-                var jobType = job.GetType();
-
-                var jobInterface = jobType
+                var genericInterface = stage.GetType()
                     .GetInterfaces()
-                    .Single(i => i.GetGenericTypeDefinition() == typeof(IPipelineJob<,>));
+                    .Single(
+                        i => i.GetGenericTypeDefinition() == typeof(IPipelineStage<,>));
 
-                var invokableMethod = jobInterface.GetMethods().FirstOrDefault();
-                if (invokableMethod == null)
-                    throw new MissingMethodException("Current job don´t contain expected method implementation.");
+                var invokableMethod = genericInterface.GetMethods().Single();
 
                 try {
-                    current = invokableMethod.Invoke(job, new[] { current });
+                    current = invokableMethod.Invoke(stage, new[] { current });
                 }
-                catch (Exception exception)
-                {
+                catch (Exception exception) {
                     //TargetInvocationException is handled here, Base exception must be propagated
-                    var e = exception.GetBaseException();
-
                     if (OnError != null)
-                        OnError(job, exception);
+                        OnError(stage, exception.GetBaseException());
                     else
                         throw exception.GetBaseException();
                 }
@@ -85,12 +66,12 @@ namespace Skyland.Pipeline.Impl
             return (TOutput) current;
         }
 
-        internal void RegisterJob<TJobIn, TJobOut>(IPipelineJob<TJobIn, TJobOut> job)
+        internal void RegisterStage<TIn, TOut>(PipelineStage<TIn, TOut> stage)
         {
-            if (job == null)
-                throw new ArgumentNullException("job");
+            if (stage == null)
+                throw new ArgumentNullException("stage");
 
-            _jobs.Add(job);
+            _stages.Add(stage);
         }
     }
 }
