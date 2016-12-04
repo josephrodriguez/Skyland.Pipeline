@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Skyland.Pipeline.Attributes;
 using Skyland.Pipeline.Filters;
 using Skyland.Pipeline.Handlers;
 
@@ -27,7 +26,6 @@ namespace Skyland.Pipeline.Impl
             _handlers = new List<IPipelineHandler<TOutput>>();
         }
 
-        [RuntimeInvokable]
         public TOutput Execute(TInput input)
         {
             //Invoke registered input handlers

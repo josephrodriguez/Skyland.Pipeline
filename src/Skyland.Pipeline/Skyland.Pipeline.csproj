@@ -35,7 +35,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\RuntimeInvokableAttribute.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Exceptions\PipelineException.cs" />
     <Compile Include="Filters\IPipelineFilter.cs" />
