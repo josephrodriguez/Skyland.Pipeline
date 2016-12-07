@@ -1,4 +1,4 @@
-version: 0.0.1.{build}
+version: 0.0.2.{build}
 
 #---------------------------------#
 #    environment configuration    #
@@ -46,6 +46,7 @@ deploy:
     skip_symbols: false
     on:
       branch: dev                   # release from dev branch only
+      force_update : true
 
       
 # build cache to preserve files/folders between builds
