@@ -38,7 +38,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultFixture.cs" />
+    <Compile Include="InlineJobFixture.cs" />
+    <Compile Include="Jobs\MultipleJob.cs" />
+    <Compile Include="PipelineJobFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

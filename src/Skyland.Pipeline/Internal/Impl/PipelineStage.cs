@@ -3,12 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Skyland.Pipeline.Enums;
 using Skyland.Pipeline.Filters;
 using Skyland.Pipeline.Handlers;
+using Skyland.Pipeline.Internal.Interfaces;
 
 #endregion
 
-namespace Skyland.Pipeline.Impl
+namespace Skyland.Pipeline.Internal.Impl
 {
     internal class PipelineStage<TInput, TOutput> : IPipelineStage<TInput, TOutput>
     {
@@ -26,11 +28,11 @@ namespace Skyland.Pipeline.Impl
             _handlers = new List<IPipelineHandler<TOutput>>();
         }
 
-        public TOutput Execute(TInput input)
+        public PipelineResult<TOutput> Execute(TInput input)
         {
             //Invoke registered input handlers
-            if (_filters.Any(filter => filter.Filter(input)))
-                return default(TOutput);
+            if (_filters.Any(filter => !filter.Filter(input)))
+                return new PipelineResult<TOutput>(Status.Rejected);
 
             var output = _job.Process(input);
 
@@ -38,7 +40,8 @@ namespace Skyland.Pipeline.Impl
             foreach (var handler in _handlers)
                 handler.Handle(output);
 
-            return output;
+            return 
+                new PipelineResult<TOutput>(output);
         }
 
         public void Register(IPipelineFilter<TInput> filter)

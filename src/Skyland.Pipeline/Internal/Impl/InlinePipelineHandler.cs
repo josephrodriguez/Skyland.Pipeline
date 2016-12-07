@@ -1,7 +1,6 @@
 ﻿#region using
 
 using System;
-using Skyland.Pipeline.Handler;
 using Skyland.Pipeline.Handlers;
 
 #endregion

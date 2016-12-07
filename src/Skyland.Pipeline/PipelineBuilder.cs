@@ -3,8 +3,8 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Skyland.Pipeline.Handler;
-using Skyland.Pipeline.Impl;
+using Skyland.Pipeline.Handlers;
+using Skyland.Pipeline.Internal.Impl;
 
 #endregion
 
@@ -12,14 +12,14 @@ namespace Skyland.Pipeline
 {
     public class PipelineBuilder<TInput, TOutput>
     {
-        private readonly DefaultPipeline<TInput, TOutput> _pipeline;
+        private readonly Pipeline<TInput, TOutput> _pipeline;
 
         public PipelineBuilder()
         {
-            _pipeline = new DefaultPipeline<TInput, TOutput>();
+            _pipeline = new Pipeline<TInput, TOutput>();
         }
 
-        public PipelineBuilder<TInput, TOutput> Register<TIn, TOut>(StageComponent<TIn, TOut> component)
+        public PipelineBuilder<TInput, TOutput> Register<TIn, TOut>(Stage<TIn, TOut> component)
         {
             if(component == null)
                 throw new ArgumentNullException("component");
@@ -66,7 +66,7 @@ namespace Skyland.Pipeline
                 if(genericType == null)
                     throw new InvalidOperationException("Stage component is not generic type.");
 
-                if (genericType != typeof (StageComponent<,>))
+                if (genericType != typeof (Stage<,>))
                     throw new InvalidOperationException("Specific component don´t implement a required type.");
 
                 var arguments = component.GetType().GetGenericArguments();

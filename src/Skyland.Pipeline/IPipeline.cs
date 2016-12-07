@@ -1,9 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Skyland.Pipeline.Handler;
-
-namespace Skyland.Pipeline
+﻿namespace Skyland.Pipeline
 {
-    public interface IPipeline<in TIn, out TOut>
+    public interface IPipeline<in TInput, TOutput>
     {
         #region Methods
 
@@ -12,7 +9,7 @@ namespace Skyland.Pipeline
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        TOut Execute(TIn input);
+        PipelineResult<TOutput> Execute(TInput input);
 
         #endregion
     }

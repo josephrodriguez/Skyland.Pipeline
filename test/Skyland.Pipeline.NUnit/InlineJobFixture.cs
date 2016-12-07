@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -12,29 +13,26 @@ using NUnit.Framework;
 namespace Skyland.Pipeline.NUnit
 {
     [TestFixture]
-    public class DefaultFixture
+    public class InlineJobFixture
     {
         [Test]
         public void CreatePipelineWithInlineJobs()
         {
             var evenPipeline = new PipelineBuilder<string, bool>()
                 .Register(
-                    Component
-                        .ForJob<string, string>(s => s.Trim())
-                        .WithFilter(string.IsNullOrEmpty)
-                        .WithFilter(s => s.Length == 1),
-                    Component
-                        .ForJob<string, int>(int.Parse)
+                    new Stage<string,string>(s => s.Trim())
+                        .WithFilter(s => !string.IsNullOrEmpty(s))
+                        .WithFilter(s => s.Length == 5),
+                    new Stage<string, int>(int.Parse)
                         .WithHandler(Console.WriteLine)
                         .WithHandler(i => Trace.WriteLine(i)),
-                    Component
-                        .ForJob<int, bool>(i => i % 2 == 0)
+                    new Stage<int, bool>(i => i % 2 == 0)
                         )
                 .Build();
 
-            var result = evenPipeline.Execute(" 56  ");
+            var output = evenPipeline.Execute(" 56  ");
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(output.Result);
         }
 
         [Test]
@@ -43,7 +41,9 @@ namespace Skyland.Pipeline.NUnit
             var handledException = false;
 
             var pipeline = new PipelineBuilder<int, int>()
-                .Register(Component.ForJob<int, int>(s => { throw new NotImplementedException(); }))
+                .Register(
+                    new Stage<int, int>(s => { throw new NotImplementedException();})
+                    )
                 .OnError((sender, exception) => handledException = true)
                 .Build();
 
@@ -56,7 +56,7 @@ namespace Skyland.Pipeline.NUnit
         public void UnhandledException()
         {
             var pipeline = new PipelineBuilder<int, int>()
-                .Register(Component.ForJob<int, int>(s => { throw new NotImplementedException(); }))
+                .Register(new Stage<int, int>(s => { throw new NotImplementedException(); }))
                 .Build();
 
             Assert.Throws<NotImplementedException>(() => pipeline.Execute(0));

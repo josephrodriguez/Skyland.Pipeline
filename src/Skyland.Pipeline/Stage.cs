@@ -7,30 +7,44 @@ using Skyland.Pipeline.Handlers;
 using Skyland.Pipeline.Impl;
 using Skyland.Pipeline.Impl.Filters;
 using Skyland.Pipeline.Impl.Handlers;
+using Skyland.Pipeline.Internal.Impl;
 
 #endregion
 
 namespace Skyland.Pipeline
 {
-    public sealed class StageComponent<TInput, TOutput>
+    public sealed class Stage<TInput, TOutput>
     {
         private readonly IPipelineJob<TInput, TOutput> _job;
 
         private readonly IList<IPipelineFilter<TInput>> _filters;
-        private readonly IList<IPipelineHandler<TOutput>> _handlers; 
-         
-        internal StageComponent(IPipelineJob<TInput, TOutput> job)
+        private readonly IList<IPipelineHandler<TOutput>> _handlers;
+
+        private Stage()
+        {
+            _filters  = new List<IPipelineFilter<TInput>>();
+            _handlers = new List<IPipelineHandler<TOutput>>();
+        }
+
+        public Stage(IPipelineJob<TInput, TOutput> job)
+            :this()
         {
             if(job == null)
                 throw new ArgumentNullException("job");
 
             _job = job;
-
-            _filters = new List<IPipelineFilter<TInput>>();
-            _handlers = new List<IPipelineHandler<TOutput>>();
         }
 
-        public StageComponent<TInput, TOutput> WithFilter(IPipelineFilter<TInput> filter)
+        public Stage(Func<TInput, TOutput> function)
+            :this()
+        {
+            if (function == null)
+                throw new ArgumentNullException("function");
+
+            _job = new InlineJob<TInput, TOutput>(function);
+        }
+
+        public Stage<TInput, TOutput> WithFilter(IPipelineFilter<TInput> filter)
         {
             if(filter == null)
                 throw new ArgumentNullException("filter");
@@ -40,7 +54,7 @@ namespace Skyland.Pipeline
             return this;
         }
 
-        public StageComponent<TInput, TOutput> WithFilter(Func<TInput, bool> function)
+        public Stage<TInput, TOutput> WithFilter(Func<TInput, bool> function)
         {
             if (function == null)
                 throw new ArgumentNullException("function");
@@ -48,7 +62,7 @@ namespace Skyland.Pipeline
             return WithFilter(new InlinePipelineFilter<TInput>(function));
         }
 
-        public StageComponent<TInput, TOutput> WithHandler(IPipelineHandler<TOutput> handler)
+        public Stage<TInput, TOutput> WithHandler(IPipelineHandler<TOutput> handler)
         {
             if(handler == null)
                 throw new ArgumentNullException("handler");
@@ -58,7 +72,7 @@ namespace Skyland.Pipeline
             return this;
         }
 
-        public StageComponent<TInput, TOutput> WithHandler(Action<TOutput> action)
+        public Stage<TInput, TOutput> WithHandler(Action<TOutput> action)
         {
             if (action == null)
                 throw new ArgumentNullException("action");
