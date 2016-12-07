@@ -16,12 +16,42 @@ Skyland Pipeline Is a C # implementation of the Chain of Responsibility pattern.
 Declare inline pipeline Which receives a string as input and returns an integer.
 
 ```cs
-var pipeline = new PipelineBuilder<string, int>()
-	.Register<string, string>(s => s.Trim())
-    .Register<string, int>(int.Parse)
-    .Register<int, int>(i => i%2)
-    .OnError((sender, exception) => Console.WriteLine(exception))
-    .Build();
+class Program
+{
+    static void Main(string[] args)
+    {
+        var pipeline = new PipelineBuilder<string, int>()
+            .Register(
+                new Stage<string, string>(i => i.Trim())
+                    .WithFilter(i => !string.IsNullOrEmpty(i))
+                    .WithHandler(i => Console.WriteLine("Hanndler for trimmed string: {0}.", i)))
+            .Register(
+                new Stage<string, int>(int.Parse)
+                    .WithFilter(new SecondFilter()))
+            .Build();
 
-int result = pipeline.Execute(" 123  ");
+        var output = pipeline.Execute("  5768 ");
+
+        Console.WriteLine("Output status: {0}.", output.Status);
+        Console.WriteLine("Output result: {0}.", output.Result);
+
+        Console.ReadLine();
+    }
+}
+
+class SecondFilter : IPipelineFilter<string>
+{
+    private readonly Regex _regex = new Regex("\\d+");
+ 
+    public bool Filter(string input)
+    {
+        return _regex.IsMatch(input);
+    }
+}
 ```
+
+Output:
+
+    Hanndler for trimmed string: 5768.
+    Output status: Completed.
+    Output result: 5768.
