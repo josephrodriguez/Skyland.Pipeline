@@ -15,9 +15,9 @@ namespace Skyland.Pipeline.NUnit
         {
             var pipeline = new PipelineBuilder<string, bool>()
                 .Register(
-                    new Stage<string, int>(new MultipleJob()))
+                    new StageComponent<string, int>(new MultipleJob()))
                 .Register(
-                    new Stage<int, bool>(i => i % 2 == 0))
+                    new StageComponent<int, bool>(i => i % 2 == 0))
                 .Build();
 
             var output = pipeline.Execute("ABCD");
@@ -30,9 +30,9 @@ namespace Skyland.Pipeline.NUnit
         {
             var pipeline = new PipelineBuilder<string, int>()
                 .Register(
-                    new Stage<string, string>(new MultipleJob()))
+                    new StageComponent<string, string>(new MultipleJob()))
                 .Register(
-                    new Stage<string, int>(new MultipleJob()))
+                    new StageComponent<string, int>(new MultipleJob()))
                 .Build();
 
             var output = pipeline.Execute("   ABCD");

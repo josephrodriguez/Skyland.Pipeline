@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Skyland.Pipeline.Enums;
 using Skyland.Pipeline.Handlers;
 using Skyland.Pipeline.Internal.Interfaces;
@@ -84,7 +83,7 @@ namespace Skyland.Pipeline.Internal.Impl
                 }
             }
 
-            return new PipelineResult<TOutput>((TOutput) current, Status.Completed);
+            return new PipelineResult<TOutput>((TOutput) current);
         }
 
         internal void RegisterStage<TIn, TOut>(PipelineStage<TIn, TOut> stage)

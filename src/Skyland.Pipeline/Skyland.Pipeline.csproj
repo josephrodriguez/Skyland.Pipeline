@@ -22,6 +22,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\Skyland.Pipeline.XML</DocumentationFile>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,7 +39,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\PipelineException.cs" />
     <Compile Include="Filters\IPipelineFilter.cs" />
     <Compile Include="Handlers\IPipelineHandler.cs" />
     <Compile Include="Handlers\PipelineErrorHandler.cs" />
@@ -48,13 +49,13 @@
     <Compile Include="Internal\Impl\InlineJob.cs" />
     <Compile Include="Internal\Impl\PipelineStage.cs" />
     <Compile Include="Internal\Reflection\Reflector.cs" />
-    <Compile Include="StageResult.cs" />
+    <Compile Include="PipelineResult.cs" />
     <Compile Include="IPipeline.cs" />
     <Compile Include="IPipelineJob.cs" />
     <Compile Include="Internal\Interfaces\IPipelineStage.cs" />
     <Compile Include="PipelineBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stage.cs" />
+    <Compile Include="StageComponent.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -20,13 +20,13 @@ namespace Skyland.Pipeline.NUnit
         {
             var evenPipeline = new PipelineBuilder<string, bool>()
                 .Register(
-                    new Stage<string,string>(s => s.Trim())
+                    new StageComponent<string,string>(s => s.Trim())
                         .WithFilter(s => !string.IsNullOrEmpty(s))
                         .WithFilter(s => s.Length == 5),
-                    new Stage<string, int>(int.Parse)
+                    new StageComponent<string, int>(int.Parse)
                         .WithHandler(Console.WriteLine)
                         .WithHandler(i => Trace.WriteLine(i)),
-                    new Stage<int, bool>(i => i % 2 == 0)
+                    new StageComponent<int, bool>(i => i % 2 == 0)
                         )
                 .Build();
 
@@ -42,7 +42,7 @@ namespace Skyland.Pipeline.NUnit
 
             var pipeline = new PipelineBuilder<int, int>()
                 .Register(
-                    new Stage<int, int>(s => { throw new NotImplementedException();})
+                    new StageComponent<int, int>(s => { throw new NotImplementedException();})
                     )
                 .OnError((sender, exception) => handledException = true)
                 .Build();
@@ -56,7 +56,7 @@ namespace Skyland.Pipeline.NUnit
         public void UnhandledException()
         {
             var pipeline = new PipelineBuilder<int, int>()
-                .Register(new Stage<int, int>(s => { throw new NotImplementedException(); }))
+                .Register(new StageComponent<int, int>(s => { throw new NotImplementedException(); }))
                 .Build();
 
             Assert.Throws<NotImplementedException>(() => pipeline.Execute(0));
