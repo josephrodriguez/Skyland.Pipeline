@@ -46,8 +46,6 @@ deploy:
     skip_symbols: false
     on:
       branch: dev                   # release from dev branch only
-      force_update : true
-
       
 # build cache to preserve files/folders between builds
 cache:
