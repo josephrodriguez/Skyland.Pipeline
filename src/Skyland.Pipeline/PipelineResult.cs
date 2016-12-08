@@ -26,6 +26,11 @@ namespace Skyland.Pipeline
             _status = status;
         }
 
+        internal Status Status
+        {
+            get { return _status; }
+        }
+
         /// <summary>
         /// Gets a value indicating whether this pipeline result is completed.
         /// </summary>

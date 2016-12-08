@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using Skyland.Pipeline.Enums;
 using Skyland.Pipeline.Handlers;
 using Skyland.Pipeline.Internal.Interfaces;
@@ -59,7 +61,7 @@ namespace Skyland.Pipeline.Internal.Impl
                     var result = methodInfo.Invoke(stage, new[] { current });
 
                     //Get status of result
-                    var status = result.GetPropertyValues<Status>().First();
+                    var status = result.GetPropertyValues<Status>(BindingFlags.Instance | BindingFlags.NonPublic).First();
                     if(status != Status.Completed)
                         return new PipelineResult<TOutput>(status);
 
@@ -68,7 +70,7 @@ namespace Skyland.Pipeline.Internal.Impl
                     if(arguments.Length != 2)
                         throw new InvalidOperationException();
 
-                    current = result.GetPropertyValues(arguments[1]).First();
+                    current = result.GetPropertyValues(arguments[1], BindingFlags.Instance | BindingFlags.Public).First();
                 }
                 catch (Exception exception)
                 {
