@@ -1,17 +1,16 @@
 ﻿#region using
 
 using System;
-using Skyland.Pipeline.Handlers;
 
 #endregion
 
-namespace Skyland.Pipeline.Impl.Handlers
+namespace Skyland.Pipeline.Internal.Components
 {
-    internal class InlinePipelineHandler<T> : IPipelineHandler<T>
+    internal class InlineHandlerComponent<T> : IHandlerComponent<T>
     {
         private readonly Action<T> _action;
 
-        public InlinePipelineHandler(Action<T> action)
+        public InlineHandlerComponent(Action<T> action)
         {
             if(action == null)
                 throw new ArgumentNullException("action");

@@ -1,6 +1,12 @@
 ﻿#region using
 
-using Skyland.Pipeline.Enums;
+
+
+#endregion
+
+#region using
+
+using Skyland.Pipeline.Internal.Enums;
 
 #endregion
 
@@ -12,23 +18,18 @@ namespace Skyland.Pipeline
     /// <typeparam name="TResult">The type of the result.</typeparam>
     public class PipelineResult<TResult>
     {
-        private readonly Status _status;
+        private readonly ResponseStatus _status;
 
         internal PipelineResult(TResult result)
         {
             Result = result;
-            _status = Status.Completed;
+            _status = ResponseStatus.Completed;
         }
 
-        internal PipelineResult(Status status)
+        internal PipelineResult(ResponseStatus status)
         {
             Result = default(TResult);
             _status = status;
-        }
-
-        internal Status Status
-        {
-            get { return _status; }
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace Skyland.Pipeline
         /// </value>
         public bool IsCompleted
         {
-            get { return _status == Status.Completed; }
+            get { return _status == ResponseStatus.Completed; }
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Skyland.Pipeline
         /// </value>
         public bool IsFaulted
         {
-            get { return _status == Status.Error; }
+            get { return _status == ResponseStatus.Error; }
         }
 
         /// <summary>
@@ -61,13 +62,12 @@ namespace Skyland.Pipeline
         /// </value>
         public bool IsRejected
         {
-            get { return _status == Status.Rejected; }
+            get { return _status == ResponseStatus.Rejected; }
         }
 
         /// <summary>
         /// Gets the final result value of pipeline job.
         /// </summary>
         public TResult Result { get; private set; }
-
     }
 }

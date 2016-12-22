@@ -38,9 +38,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InlineJobFixture.cs" />
+    <Compile Include="ExceptionsFixture.cs" />
+    <Compile Include="FiltersFixture.cs" />
+    <Compile Include="HandlersFixture.cs" />
+    <Compile Include="JobsFixture.cs" />
     <Compile Include="Jobs\MultipleJob.cs" />
-    <Compile Include="PipelineJobFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

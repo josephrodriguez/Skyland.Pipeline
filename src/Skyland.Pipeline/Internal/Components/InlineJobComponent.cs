@@ -4,13 +4,13 @@ using System;
 
 #endregion
 
-namespace Skyland.Pipeline.Impl
+namespace Skyland.Pipeline.Internal.Components
 {
-    internal class InlineJob<TInput, TOutput> : IPipelineJob<TInput, TOutput>
+    internal class InlineJobComponent<TInput, TOutput> : IJobComponent<TInput, TOutput>
     {
         private readonly Func<TInput, TOutput> _function;
 
-        public InlineJob(Func<TInput, TOutput> function)
+        public InlineJobComponent(Func<TInput, TOutput> function)
         {
             if(function == null)
                 throw new ArgumentNullException();
@@ -18,7 +18,7 @@ namespace Skyland.Pipeline.Impl
             _function = function;
         }  
 
-        public TOutput Process(TInput input)
+        public TOutput Execute(TInput input)
         {
             return _function(input);
         }

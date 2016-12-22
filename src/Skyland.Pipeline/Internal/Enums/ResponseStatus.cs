@@ -1,9 +1,9 @@
-﻿namespace Skyland.Pipeline.Enums
+﻿namespace Skyland.Pipeline.Internal.Enums
 {
     /// <summary>
     /// 
     /// </summary>
-    internal enum Status
+    internal enum ResponseStatus
     {
         /// <summary>
         /// The completed
