@@ -16,9 +16,9 @@ namespace Skyland.Pipeline.Internal.Components
             _action = action;
         }
 
-        public void Handle(T input)
+        public void Handle(T obj)
         {
-            _action.Invoke(input);
+            _action.Invoke(obj);
         }
     }
 }

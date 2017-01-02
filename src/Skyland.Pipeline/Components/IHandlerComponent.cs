@@ -1,15 +1,15 @@
 ﻿namespace Skyland.Pipeline.Components
 {
     /// <summary>
-    /// 
+    /// Represent a handler component which handle the output object of job component.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IHandlerComponent<in T>
     {
         /// <summary>
-        /// 
+        /// Perform an action on output result of job component.
         /// </summary>
-        /// <param name="handledObj"></param>
-        void Handle(T handledObj);
+        /// <param name="obj"></param>
+        void Handle(T obj);
     }
 }

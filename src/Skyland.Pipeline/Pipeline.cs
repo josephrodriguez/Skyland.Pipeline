@@ -81,8 +81,8 @@ namespace Skyland.Pipeline
             /// <summary>
             /// Registers the specified configurator.
             /// </summary>
-            /// <typeparam name="Input">The type of the nput.</typeparam>
-            /// <typeparam name="Output">The type of the utput.</typeparam>
+            /// <typeparam name="Input">The type of the input.</typeparam>
+            /// <typeparam name="Output">The type of the output.</typeparam>
             /// <param name="configurator">The configurator.</param>
             /// <returns></returns>
             /// <exception cref="Skyland.Pipeline.Exceptions.PipelineException"></exception>

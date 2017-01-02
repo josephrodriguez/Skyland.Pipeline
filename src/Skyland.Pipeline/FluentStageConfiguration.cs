@@ -92,7 +92,7 @@ namespace Skyland.Pipeline
         }
 
         /// <summary>
-        /// Jobs the specified job.
+        /// Register the job component of stage that perform the proccessing.
         /// </summary>
         /// <param name="job">The job.</param>
         /// <returns></returns>
@@ -107,7 +107,7 @@ namespace Skyland.Pipeline
         }
 
         /// <summary>
-        /// Jobs the specified job function.
+        /// Register a function as the job component of stage.
         /// </summary>
         /// <param name="jobFunction">The job function.</param>
         /// <returns></returns>
@@ -122,7 +122,7 @@ namespace Skyland.Pipeline
         }
 
         /// <summary>
-        /// 
+        /// Register the job component of stage that perform the proccessing.
         /// </summary>
         /// <typeparam name="TJob"></typeparam>
         /// <returns></returns>

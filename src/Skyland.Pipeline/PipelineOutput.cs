@@ -13,7 +13,7 @@ using Skyland.Pipeline.Internal.Enums;
 namespace Skyland.Pipeline
 {
     /// <summary>
-    /// Represent the output of pipeline job
+    /// Represent the output of pipeline after invoke Execute method of IPipeline instance
     /// </summary>
     /// <typeparam name="TResult">The type of the result.</typeparam>
     public class PipelineOutput<TResult>

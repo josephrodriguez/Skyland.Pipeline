@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using NUnit.Framework;
 using Skyland.Pipeline.Components;
 using Skyland.Pipeline.Exceptions;
@@ -147,15 +148,26 @@ namespace Skyland.Pipeline.NUnit
         [Test]
         public void HandlerContainerUnhandledException()
         {
-            var pipeline = new Pipeline<DateTime, int>.Builder()
-                .Register<DateTime, int>(
+            //var pipeline = new Pipeline<DateTime, int>.Builder()
+            //    .Register<DateTime, int>(
+            //        stage =>
+            //            stage
+            //                .Job(datetime => datetime.Millisecond)
+            //                .Handler(i => { throw new NotImplementedException(); }))
+            //    .Build();
+
+            //Assert.Throws<NotImplementedException>(() => pipeline.Execute(DateTime.Now));
+
+            var pipeline = new Pipeline<string, MockClassA>.Builder()
+                .Register<string, string>(
                     stage =>
                         stage
-                            .Job(datetime => datetime.Millisecond)
-                            .Handler(i => { throw new NotImplementedException(); }))
+                            .Filter(filepath => !string.IsNullOrEmpty(filepath))
+                            .Filter(File.Exists)
+                            .Job(File.ReadAllText)
+                            .Handler(Console.WriteLine))
+                .Register<string, MockClassA>()
                 .Build();
-
-            Assert.Throws<NotImplementedException>(() => pipeline.Execute(DateTime.Now));
         }
 
         [Test]

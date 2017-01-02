@@ -10,9 +10,9 @@ namespace Skyland.Pipeline.NUnit.Classes
 {
     class MockHandler1:IHandlerComponent<int>
     {
-        public void Handle(int handledObj)
+        public void Handle(int obj)
         {
-            Trace.TraceInformation(handledObj.ToString());
+            Trace.TraceInformation(obj.ToString());
         }
     }
 }
