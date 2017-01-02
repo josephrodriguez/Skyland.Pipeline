@@ -9,7 +9,7 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="element"></param>
-        void Handle(T element);
+        /// <param name="handledObj"></param>
+        void Handle(T handledObj);
     }
 }

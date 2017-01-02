@@ -13,9 +13,6 @@ namespace Skyland.Pipeline.Internal.Components
 
         public InlineHandlerComponent(Action<T> action)
         {
-            if(action == null)
-                throw new ArgumentNullException("action");
-
             _action = action;
         }
 

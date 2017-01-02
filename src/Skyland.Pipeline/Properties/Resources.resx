@@ -120,6 +120,9 @@
   <data name="JobComponent_Registered_Error" xml:space="preserve">
     <value>There is a JobComponent instance registered. Only one instance of this component can be registered.</value>
   </data>
+  <data name="Missmatch_LastRegisteredComponent_Error" xml:space="preserve">
+    <value>The output of last registered component missmatch with the input of current component.</value>
+  </data>
   <data name="Missmatch_TypeInput_Error" xml:space="preserve">
     <value>Type input of registered stage missmatch with the input type of pipeline.</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="NoJob_Registered_Error" xml:space="preserve">
     <value>There is not job component registered instance for this stage.</value>
+  </data>
+  <data name="Pipeline_WithoutRegisteredComponent_Error" xml:space="preserve">
+    <value>Current pipeline must have at least one registered component.</value>
   </data>
   <data name="Register_Filter_Error" xml:space="preserve">
     <value>The filters must be registered before register the JobComponent instance.</value>

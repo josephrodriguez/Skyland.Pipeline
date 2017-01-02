@@ -13,9 +13,6 @@ namespace Skyland.Pipeline.Internal.Components
 
         public InlineJobComponent(Func<TInput, TOutput> function)
         {
-            if(function == null)
-                throw new ArgumentNullException();
-
             _function = function;
         }  
 

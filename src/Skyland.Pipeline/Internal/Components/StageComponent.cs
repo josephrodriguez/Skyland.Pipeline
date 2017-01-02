@@ -16,19 +16,13 @@ namespace Skyland.Pipeline.Internal.Components
         private IList<IHandlerExecutionContainer> _handlerContainers; 
         private readonly IJobExecutionContainer _jobExecutionContainer;
 
-        public StageComponent(IJobExecutionContainer jobExecutionContainer)
+        public StageComponent(IJobExecutionContainer container)
         {
-            if(jobExecutionContainer == null)
-                throw new ArgumentNullException(nameof(jobExecutionContainer));
-
-            _jobExecutionContainer = jobExecutionContainer;
+            _jobExecutionContainer = container;
         }
 
         public void Register(IFilterExecutionContainer filterExecutionContainer)
         {
-            if(filterExecutionContainer == null)
-                throw new ArgumentNullException(nameof(filterExecutionContainer));
-
             if(_filterContainers == null)
                 _filterContainers = new List<IFilterExecutionContainer>();
 
@@ -37,16 +31,13 @@ namespace Skyland.Pipeline.Internal.Components
 
         public void Register(IHandlerExecutionContainer handlerExecutionContainer)
         {
-            if (handlerExecutionContainer == null)
-                throw new ArgumentNullException(nameof(handlerExecutionContainer));
-
             if (_handlerContainers == null)
                 _handlerContainers = new List<IHandlerExecutionContainer>();
 
             _handlerContainers.Add(handlerExecutionContainer);
         }
 
-        public PipelineOutput<object> Execute(object obj, ComponentErrorHandler handler)
+        public PipelineOutput<object> Execute(object obj, PipelineErrorHandler handler)
         {
             //Execute filters
             var output = ExecuteFilters(obj, handler);
@@ -67,7 +58,7 @@ namespace Skyland.Pipeline.Internal.Components
                     : handlersOutput;
         }
 
-        private PipelineOutput<object> ExecuteFilters(object obj, ComponentErrorHandler errorHandler)
+        private PipelineOutput<object> ExecuteFilters(object obj, PipelineErrorHandler errorHandler)
         {
             if(_filterContainers == null)
                 return new PipelineOutput<object>(OutputStatus.Completed);
@@ -82,7 +73,7 @@ namespace Skyland.Pipeline.Internal.Components
             return new PipelineOutput<object>(OutputStatus.Completed);
         }
 
-        private PipelineOutput<object> ExecuteHandlers(object obj, ComponentErrorHandler errorHandler)
+        private PipelineOutput<object> ExecuteHandlers(object obj, PipelineErrorHandler errorHandler)
         {
             if(_handlerContainers == null)
                 return new PipelineOutput<object>(OutputStatus.Completed);

@@ -18,12 +18,11 @@ namespace Skyland.Pipeline.Internal.Containers
             _handler = handler;
         }
 
-        public PipelineOutput<object> Execute(object obj, ComponentErrorHandler handler)
+        public PipelineOutput<object> Execute(object obj, PipelineErrorHandler handler)
         {
             try
             {
                 _handler.Handle((TOut)obj);
-
                 return new PipelineOutput<object>(OutputStatus.Completed);
             }
             catch (Exception exception)

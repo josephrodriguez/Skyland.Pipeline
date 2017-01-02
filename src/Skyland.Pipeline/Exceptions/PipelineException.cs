@@ -12,14 +12,6 @@ namespace Skyland.Pipeline.Exceptions
     public class PipelineException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PipelineException"/> class.
-        /// </summary>
-        public PipelineException()
-            : base(string.Empty)
-        {
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>

@@ -13,9 +13,6 @@ namespace Skyland.Pipeline.Internal.Components
 
         public InlineFilterComponent(Func<T, bool> function)
         {
-            if (function == null)
-                throw new ArgumentNullException(nameof(function));
-
             _function = function;
         }
 

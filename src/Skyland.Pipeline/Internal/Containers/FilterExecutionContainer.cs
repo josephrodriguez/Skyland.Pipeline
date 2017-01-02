@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region using
+
+using System;
 using Skyland.Pipeline.Components;
 using Skyland.Pipeline.Delegates;
 using Skyland.Pipeline.Internal.Enums;
+
+#endregion
 
 namespace Skyland.Pipeline.Internal.Containers
 {
@@ -14,12 +18,16 @@ namespace Skyland.Pipeline.Internal.Containers
             _filter = filter;
         }
 
-        public PipelineOutput<object> Execute(object obj, ComponentErrorHandler handler)
+        public PipelineOutput<object> Execute(object obj, PipelineErrorHandler handler)
         {
             try
             {
-                var output = _filter.Execute((TIn)obj);
-                return new PipelineOutput<object>(output);
+                var filtered = _filter.Execute((TIn)obj);
+
+                return
+                    filtered
+                        ? new PipelineOutput<object>(OutputStatus.Completed)
+                        : new PipelineOutput<object>(OutputStatus.Rejected); 
             }
             catch (Exception exception)
             {

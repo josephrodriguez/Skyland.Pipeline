@@ -18,7 +18,7 @@ namespace Skyland.Pipeline.Internal.Containers
             _job = job;
         }
 
-        public PipelineOutput<object> Execute(object obj, ComponentErrorHandler handler)
+        public PipelineOutput<object> Execute(object obj, PipelineErrorHandler handler)
         {
             try
             {

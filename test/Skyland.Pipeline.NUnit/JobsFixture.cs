@@ -2,6 +2,8 @@
 
 using System;
 using NUnit.Framework;
+using Skyland.Pipeline.Exceptions;
+using Skyland.Pipeline.NUnit.Classes;
 using Skyland.Pipeline.NUnit.Jobs;
 
 #endregion
@@ -99,6 +101,31 @@ namespace Skyland.Pipeline.NUnit
                 .Build();
 
             Assert.Throws<NotImplementedException>(() => pipeline.Execute(0));
+        }
+
+        [Test]
+        public void NullJobComponentFunctionFixture()
+        {
+
+            var builder = new Pipeline<int, MockClassA>.Builder()
+                .Register<int, MockClassA>(
+                    stage =>
+                        stage
+                            .Job((Func<int, MockClassA>) null)
+                            .Handler<MockHandler2>());
+
+            Assert.Throws<ArgumentNullException>(() => builder.Build());
+        }
+
+        [Test]
+        public void BuilderWithoutRegisteredJobFixture()
+        {
+            var builder = new Pipeline<MockClassA, string>.Builder()
+                .Register<MockClassA, string>(
+                    stage =>
+                        stage.Filter(mock => mock.Field1 >= 0));
+
+            Assert.Throws<PipelineException>(() => builder.Build());
         }
     }
 }

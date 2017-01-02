@@ -43,7 +43,7 @@
     <Compile Include="Internal\Containers\IFilterExecutionContainer.cs" />
     <Compile Include="Internal\Containers\IHandlerExecutionContainer.cs" />
     <Compile Include="Internal\Containers\IJobExecutionContainer.cs" />
-    <Compile Include="Delegates\ComponentErrorHandler.cs" />
+    <Compile Include="Delegates\PipelineErrorHandler.cs" />
     <Compile Include="Exceptions\PipelineException.cs" />
     <Compile Include="FluentStageConfiguration.cs" />
     <Compile Include="Internal\Components\IStageComponentBuilder.cs" />

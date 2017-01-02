@@ -11,5 +11,5 @@ namespace Skyland.Pipeline.Delegates
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="exception"></param>
-    public delegate void ComponentErrorHandler(object sender, Exception exception);
+    public delegate void PipelineErrorHandler(object sender, Exception exception);
 }

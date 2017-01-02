@@ -8,6 +8,6 @@ namespace Skyland.Pipeline.Internal.Containers
 {
     internal interface IJobExecutionContainer
     {
-        PipelineOutput<object> Execute(object obj, ComponentErrorHandler handler);
+        PipelineOutput<object> Execute(object obj, PipelineErrorHandler handler);
     }
 }

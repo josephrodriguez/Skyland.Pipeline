@@ -38,6 +38,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\MockClassA.cs" />
+    <Compile Include="Classes\MockClassB.cs" />
+    <Compile Include="Classes\MockFilterA.cs" />
+    <Compile Include="Classes\MockHandler1.cs" />
+    <Compile Include="Classes\MockHandler2.cs" />
+    <Compile Include="ConfigurationFixture.cs" />
     <Compile Include="ExceptionsFixture.cs" />
     <Compile Include="FiltersFixture.cs" />
     <Compile Include="HandlersFixture.cs" />

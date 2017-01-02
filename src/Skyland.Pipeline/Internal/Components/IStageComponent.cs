@@ -4,6 +4,6 @@ namespace Skyland.Pipeline.Internal.Components
 {
     internal interface IStageComponent
     {
-        PipelineOutput<object> Execute(object input, ComponentErrorHandler handler);
+        PipelineOutput<object> Execute(object input, PipelineErrorHandler handler);
     }
 }

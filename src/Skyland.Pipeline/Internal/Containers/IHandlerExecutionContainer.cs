@@ -17,6 +17,6 @@ namespace Skyland.Pipeline.Internal.Containers
         /// <param name="obj"></param>
         /// <param name="handler"></param>
         /// <returns></returns>
-        PipelineOutput<object> Execute(object obj, ComponentErrorHandler handler);
+        PipelineOutput<object> Execute(object obj, PipelineErrorHandler handler);
     }
 }

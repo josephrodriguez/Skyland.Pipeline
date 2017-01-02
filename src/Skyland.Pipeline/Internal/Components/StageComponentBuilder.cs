@@ -27,10 +27,10 @@ namespace Skyland.Pipeline.Internal.Components
 
             _configurator(configuration);
 
-            if (configuration.JobExecutionComponent == null)
+            if (configuration.JobComponent == null)
                 throw new PipelineException(Resources.NoJob_Registered_Error);
 
-            var stage = new StageComponent(configuration.JobExecutionComponent);
+            var stage = new StageComponent(configuration.JobComponent);
 
             foreach (var filter in configuration.FilterComponents)
                 stage.Register(filter);

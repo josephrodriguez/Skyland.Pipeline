@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Skyland.Pipeline.Components;
-using Skyland.Pipeline.Delegates;
 using Skyland.Pipeline.Exceptions;
 using Skyland.Pipeline.Internal.Components;
 using Skyland.Pipeline.Internal.Containers;
@@ -23,16 +22,16 @@ namespace Skyland.Pipeline
     {
         private IList<IFilterExecutionContainer> _filters;
         private IList<IHandlerExecutionContainer> _handlers;
-        private IJobExecutionContainer _jobExecution;
+        private IJobExecutionContainer _job;
 
         internal IEnumerable<IFilterExecutionContainer> FilterComponents
         {
             get { return _filters ?? Enumerable.Empty<IFilterExecutionContainer>();}
         }
 
-        internal IJobExecutionContainer JobExecutionComponent
+        internal IJobExecutionContainer JobComponent
         {
-            get { return _jobExecution; }
+            get { return _job; }
         }
 
         internal IEnumerable<IHandlerExecutionContainer> HandlerComponents
@@ -50,7 +49,7 @@ namespace Skyland.Pipeline
             if(filter == null)
                 throw new ArgumentNullException(nameof(filter));
 
-            if(_jobExecution != null)
+            if(_job != null)
                 throw new PipelineException(Resources.Register_Filter_Error);
 
             var container = new FilterExecutionContainer<TInput>(filter);
@@ -99,10 +98,10 @@ namespace Skyland.Pipeline
         /// <returns></returns>
         public FluentStageConfiguration<TInput, TOutput> Job(IJobComponent<TInput, TOutput> job)
         {
-            if(_jobExecution != null)
+            if(_job != null)
                 throw new PipelineException(Resources.JobComponent_Registered_Error);
 
-            _jobExecution = new JobExecutionContainer<TInput, TOutput>(job);
+            _job = new JobExecutionContainer<TInput, TOutput>(job);
 
             return this;
         }
@@ -145,7 +144,7 @@ namespace Skyland.Pipeline
             if(handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            if(_jobExecution == null)
+            if(_job == null)
                 throw new PipelineException(Resources.Register_Handler_Error);
 
             var container = new HandlerExecutionContainer<TOutput>(handler);
@@ -182,9 +181,9 @@ namespace Skyland.Pipeline
         public FluentStageConfiguration<TInput, TOutput> Handler<THandler>()
             where THandler : IHandlerComponent<TOutput>
         {
-            var handlerComponent = Activator.CreateInstance<THandler>();
+            var component = Activator.CreateInstance<THandler>();
 
-            return Handler(handlerComponent);
+            return Handler(component);
         }
     }
 }

@@ -20,26 +20,20 @@ namespace Skyland.Pipeline
     {
         private readonly IList<IStageComponent> _stages;
 
-        private ComponentErrorHandler _errorHandler;
+        private PipelineErrorHandler _errorHandler;
 
         private Pipeline()
         {
             _stages = new List<IStageComponent>();
         }
 
-        private void Register(IStageComponent component)
+        private void Register(IStageComponent stageComponent)
         {
-            if(component == null)
-                throw new ArgumentNullException(nameof(component));
-
-            _stages.Add(component);
+            _stages.Add(stageComponent);
         }
 
-        private void Register(ComponentErrorHandler errorHandler)
+        private void Register(PipelineErrorHandler errorHandler)
         {
-            if(errorHandler == null)
-                throw new ArgumentNullException(nameof(errorHandler));
-
             _errorHandler += errorHandler;
         }
 
@@ -72,7 +66,7 @@ namespace Skyland.Pipeline
         {
             private Type _currentOutputType;
 
-            private ComponentErrorHandler _errorHandler;
+            private PipelineErrorHandler _errorHandler;
 
             private readonly IList<IStageComponentBuilder> _builders;
 
@@ -98,7 +92,7 @@ namespace Skyland.Pipeline
                     throw new PipelineException(Resources.Missmatch_TypeInput_Error);
 
                 if(_currentOutputType != null && !typeof(Input).IsAssignableFrom(_currentOutputType))
-                    throw new PipelineException();
+                    throw new PipelineException(Resources.Missmatch_LastRegisteredComponent_Error);
 
                 var builder = new StageComponentBuilder<Input, Output>(configurator);
                 _builders.Add(builder);
@@ -114,7 +108,7 @@ namespace Skyland.Pipeline
             /// <param name="errorHandler"></param>
             /// <returns></returns>
             /// <exception cref="System.ArgumentNullException">handler</exception>
-            public Builder OnError(ComponentErrorHandler errorHandler)
+            public Builder OnError(PipelineErrorHandler errorHandler)
             {
                 if(errorHandler == null)
                     throw new ArgumentNullException(nameof(errorHandler));
@@ -131,6 +125,9 @@ namespace Skyland.Pipeline
             /// <returns></returns>
             public IPipeline<TInput, TOutput> Build()
             {
+                if(_currentOutputType == null)
+                    throw new PipelineException(Resources.Pipeline_WithoutRegisteredComponent_Error);
+
                 if(_currentOutputType != typeof(TOutput))
                     throw new PipelineException(Resources.Missmatch_TypeOutput_Error);
 

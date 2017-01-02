@@ -70,6 +70,15 @@ namespace Skyland.Pipeline.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The output of last registered component missmatch with the input of current component..
+        /// </summary>
+        internal static string Missmatch_LastRegisteredComponent_Error {
+            get {
+                return ResourceManager.GetString("Missmatch_LastRegisteredComponent_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type input of registered stage missmatch with the input type of pipeline..
         /// </summary>
         internal static string Missmatch_TypeInput_Error {
@@ -93,6 +102,15 @@ namespace Skyland.Pipeline.Properties {
         internal static string NoJob_Registered_Error {
             get {
                 return ResourceManager.GetString("NoJob_Registered_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current pipeline must have at least one registered component..
+        /// </summary>
+        internal static string Pipeline_WithoutRegisteredComponent_Error {
+            get {
+                return ResourceManager.GetString("Pipeline_WithoutRegisteredComponent_Error", resourceCulture);
             }
         }
         
