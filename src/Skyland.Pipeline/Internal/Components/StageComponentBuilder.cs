@@ -19,8 +19,7 @@ namespace Skyland.Pipeline.Internal.Components
                 throw new ArgumentNullException(nameof(configurator));
 
             _configurator = configurator;
-            _configurator += c => c.OnError(null);
-        } 
+        }
 
         public IStageComponent Build()
         {
@@ -28,18 +27,18 @@ namespace Skyland.Pipeline.Internal.Components
 
             _configurator(configuration);
 
-            if (configuration.JobComponent == null)
+            if (configuration.JobExecutionComponent == null)
                 throw new PipelineException(Resources.NoJob_Registered_Error);
 
-            var component = new StageComponent(configuration.JobComponent);
+            var stage = new StageComponent(configuration.JobExecutionComponent);
 
             foreach (var filter in configuration.FilterComponents)
-                component.Register(filter);
+                stage.Register(filter);
 
             foreach (var handler in configuration.HandlerComponents)
-                component.Register(handler);
+                stage.Register(handler);
 
-            return component;
+            return stage;
         }
     }
 }

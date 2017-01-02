@@ -5,6 +5,7 @@
 #endregion
 
 using System;
+using Skyland.Pipeline.Components;
 
 namespace Skyland.Pipeline.NUnit.Jobs
 {

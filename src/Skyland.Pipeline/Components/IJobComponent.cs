@@ -1,11 +1,11 @@
-﻿namespace Skyland.Pipeline
+﻿namespace Skyland.Pipeline.Components
 {
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TOutput"></typeparam>
-    public interface IJobComponent<in TInput, out TOutput> : IComponent
+    public interface IJobComponent<in TInput, out TOutput>
     {
         /// <summary>
         /// 

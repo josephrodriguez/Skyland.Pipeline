@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using Skyland.Pipeline.Delegates;
 using Skyland.Pipeline.Exceptions;
-using Skyland.Pipeline.Internal;
 using Skyland.Pipeline.Internal.Components;
-using Skyland.Pipeline.Internal.Enums;
 using Skyland.Pipeline.Properties;
 
 #endregion
@@ -20,17 +18,13 @@ namespace Skyland.Pipeline
     /// <typeparam name="TOutput"></typeparam>
     public class Pipeline<TInput, TOutput> : IPipeline<TInput, TOutput>
     {
-        private readonly IList<IStageComponent> _stageComponents;
+        private readonly IList<IStageComponent> _stages;
 
-        #region Events
-
-        internal event ErrorHandler OnError;
-
-        #endregion
+        private ComponentErrorHandler _errorHandler;
 
         private Pipeline()
         {
-            _stageComponents = new List<IStageComponent>();
+            _stages = new List<IStageComponent>();
         }
 
         private void Register(IStageComponent component)
@@ -38,7 +32,15 @@ namespace Skyland.Pipeline
             if(component == null)
                 throw new ArgumentNullException(nameof(component));
 
-            _stageComponents.Add(component);
+            _stages.Add(component);
+        }
+
+        private void Register(ComponentErrorHandler errorHandler)
+        {
+            if(errorHandler == null)
+                throw new ArgumentNullException(nameof(errorHandler));
+
+            _errorHandler += errorHandler;
         }
 
         /// <summary>
@@ -46,21 +48,20 @@ namespace Skyland.Pipeline
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns></returns>
-        public PipelineResult<TOutput> Execute(TInput input)
+        public PipelineOutput<TOutput> Execute(TInput input)
         {
             object currentObj = input;
 
-            foreach (var component in _stageComponents)
+            foreach (var stage in _stages)
             {
-                var response = component.Execute(currentObj);
-
-                if(response.Status != ResponseStatus.Completed)
-                    return new PipelineResult<TOutput>(response.Status);
-
-                currentObj = response.Result;
+                var output = stage.Execute(currentObj, _errorHandler);
+                if (output.IsCompleted)
+                    currentObj = output.Result;
+                else
+                    return new PipelineOutput<TOutput>(output.Status);
             }
 
-            return new PipelineResult<TOutput>((TOutput) currentObj);
+            return new PipelineOutput<TOutput>((TOutput) currentObj);
         }
 
         /// <summary>
@@ -70,7 +71,8 @@ namespace Skyland.Pipeline
         public class Builder
         {
             private Type _currentOutputType;
-            private ErrorHandler _errorHandler;
+
+            private ComponentErrorHandler _errorHandler;
 
             private readonly IList<IStageComponentBuilder> _builders;
 
@@ -92,15 +94,15 @@ namespace Skyland.Pipeline
             /// <exception cref="Skyland.Pipeline.Exceptions.PipelineException"></exception>
             public Builder Register<Input, Output>(FluentStageConfigurator<Input, Output> configurator)
             {
-                if (_builders.Count == 0 && typeof(TInput) != typeof(Input))
+                if (_builders.Count == 0 && !typeof(Input).IsAssignableFrom(typeof(TInput)))
                     throw new PipelineException(Resources.Missmatch_TypeInput_Error);
 
-                if(_currentOutputType != null && _currentOutputType != typeof(Input))
-
+                if(_currentOutputType != null && !typeof(Input).IsAssignableFrom(_currentOutputType))
+                    throw new PipelineException();
 
                 var builder = new StageComponentBuilder<Input, Output>(configurator);
-
                 _builders.Add(builder);
+
                 _currentOutputType = typeof(Output);
 
                 return this;
@@ -109,15 +111,16 @@ namespace Skyland.Pipeline
             /// <summary>
             /// Called when [error].
             /// </summary>
-            /// <param name="handler">The handler.</param>
+            /// <param name="errorHandler"></param>
             /// <returns></returns>
             /// <exception cref="System.ArgumentNullException">handler</exception>
-            public Builder OnError(ErrorHandler handler)
+            public Builder OnError(ComponentErrorHandler errorHandler)
             {
-                if(handler == null)
-                    throw new ArgumentNullException(nameof(handler));
+                if(errorHandler == null)
+                    throw new ArgumentNullException(nameof(errorHandler));
 
-                _errorHandler += handler;
+                //Subscribe error handler for current builders
+                _errorHandler += errorHandler;
 
                 return this;
             }
@@ -136,14 +139,12 @@ namespace Skyland.Pipeline
                 //Create components from builders
                 foreach (var builder in _builders)
                 {
-                    var component = builder.Build();
-
-                    pipeline.Register(component);
+                    var stage = builder.Build();
+                    pipeline.Register(stage);
                 }
 
-                //Register Errorhandler delegates
-                if (_errorHandler == null)
-                    return pipeline;
+                if(_errorHandler != null)
+                    pipeline.Register(_errorHandler);
 
                 return pipeline;
             }

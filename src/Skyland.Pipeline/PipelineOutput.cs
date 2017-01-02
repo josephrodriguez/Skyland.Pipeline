@@ -16,20 +16,25 @@ namespace Skyland.Pipeline
     /// Represent the output of pipeline job
     /// </summary>
     /// <typeparam name="TResult">The type of the result.</typeparam>
-    public class PipelineResult<TResult>
+    public class PipelineOutput<TResult>
     {
-        private readonly ResponseStatus _status;
+        private readonly OutputStatus _status;
 
-        internal PipelineResult(TResult result)
+        internal PipelineOutput(TResult result)
         {
             Result = result;
-            _status = ResponseStatus.Completed;
+            _status = OutputStatus.Completed;
         }
 
-        internal PipelineResult(ResponseStatus status)
+        internal PipelineOutput(OutputStatus status)
         {
             Result = default(TResult);
             _status = status;
+        }
+
+        internal OutputStatus Status
+        {
+            get { return _status;}
         }
 
         /// <summary>
@@ -40,7 +45,7 @@ namespace Skyland.Pipeline
         /// </value>
         public bool IsCompleted
         {
-            get { return _status == ResponseStatus.Completed; }
+            get { return _status == OutputStatus.Completed; }
         }
 
         /// <summary>
@@ -51,7 +56,7 @@ namespace Skyland.Pipeline
         /// </value>
         public bool IsFaulted
         {
-            get { return _status == ResponseStatus.Error; }
+            get { return _status == OutputStatus.Error; }
         }
 
         /// <summary>
@@ -62,7 +67,7 @@ namespace Skyland.Pipeline
         /// </value>
         public bool IsRejected
         {
-            get { return _status == ResponseStatus.Rejected; }
+            get { return _status == OutputStatus.Rejected; }
         }
 
         /// <summary>

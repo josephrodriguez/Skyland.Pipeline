@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns></returns>
-        PipelineResult<TOutput> Execute(TInput input);
+        PipelineOutput<TOutput> Execute(TInput input);
 
         #endregion
     }

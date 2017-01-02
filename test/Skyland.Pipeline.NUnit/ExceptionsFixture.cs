@@ -69,14 +69,15 @@ namespace Skyland.Pipeline.NUnit
         [Test]
         public void MissmatchInputType()
         {
-            var builder =
-                new Pipeline<string, int>.Builder()
-                    .Register<bool, int>(
-                        stage =>
-                            stage
-                                .Job(b => b ? 1 : 0));
+            Func<Pipeline<string, int>.Builder> func =
+                () =>
+                    new Pipeline<string, int>.Builder()
+                        .Register<bool, int>(
+                            stage =>
+                                stage
+                                    .Job(b => b ? 1 : 0));
 
-            Assert.Throws<PipelineException>(() => builder.Build());
+            Assert.Throws<PipelineException>(() => func.Invoke());
         }
 
         [Test]

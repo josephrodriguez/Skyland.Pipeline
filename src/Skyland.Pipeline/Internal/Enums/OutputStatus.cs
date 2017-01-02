@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    internal enum ResponseStatus
+    internal enum OutputStatus
     {
         /// <summary>
         /// The completed
