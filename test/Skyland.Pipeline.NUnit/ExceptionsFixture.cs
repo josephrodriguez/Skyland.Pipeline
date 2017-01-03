@@ -148,26 +148,15 @@ namespace Skyland.Pipeline.NUnit
         [Test]
         public void HandlerContainerUnhandledException()
         {
-            //var pipeline = new Pipeline<DateTime, int>.Builder()
-            //    .Register<DateTime, int>(
-            //        stage =>
-            //            stage
-            //                .Job(datetime => datetime.Millisecond)
-            //                .Handler(i => { throw new NotImplementedException(); }))
-            //    .Build();
-
-            //Assert.Throws<NotImplementedException>(() => pipeline.Execute(DateTime.Now));
-
-            var pipeline = new Pipeline<string, MockClassA>.Builder()
-                .Register<string, string>(
+            var pipeline = new Pipeline<DateTime, int>.Builder()
+                .Register<DateTime, int>(
                     stage =>
                         stage
-                            .Filter(filepath => !string.IsNullOrEmpty(filepath))
-                            .Filter(File.Exists)
-                            .Job(File.ReadAllText)
-                            .Handler(Console.WriteLine))
-                .Register<string, MockClassA>()
+                            .Job(datetime => datetime.Millisecond)
+                            .Handler(i => { throw new NotImplementedException(); }))
                 .Build();
+
+            Assert.Throws<NotImplementedException>(() => pipeline.Execute(DateTime.Now));
         }
 
         [Test]
