@@ -3,8 +3,11 @@
 using System;
 using System.Collections.Generic;
 using Skyland.Pipeline.Delegates;
+using Skyland.Pipeline.Exceptions;
+using Skyland.Pipeline.Extensions;
 using Skyland.Pipeline.Internal.Containers;
 using Skyland.Pipeline.Internal.Enums;
+using Skyland.Pipeline.Internal.Interfaces;
 
 #endregion
 
@@ -12,80 +15,60 @@ namespace Skyland.Pipeline.Internal.Components
 {
     internal sealed class StageComponent : IStageComponent
     {
-        private IList<IFilterExecutionContainer> _filterContainers;
-        private IList<IHandlerExecutionContainer> _handlerContainers; 
-        private readonly IJobExecutionContainer _jobExecutionContainer;
+        private IList<IFilterExecutionContainer> _filters;
+        private IList<IHandlerExecutionContainer> _handlers; 
+        private readonly IJobExecutionContainer _jobContainer;
 
-        public StageComponent(IJobExecutionContainer container)
+        public StageComponent(IJobExecutionContainer jobContainerContainer)
         {
-            _jobExecutionContainer = container;
+            _jobContainer = jobContainerContainer;
         }
 
         public void Register(IFilterExecutionContainer filterExecutionContainer)
         {
-            if(_filterContainers == null)
-                _filterContainers = new List<IFilterExecutionContainer>();
+            if(_filters == null)
+                _filters = new List<IFilterExecutionContainer>();
 
-            _filterContainers.Add(filterExecutionContainer);
+            _filters.Add(filterExecutionContainer);
         }
 
         public void Register(IHandlerExecutionContainer handlerExecutionContainer)
         {
-            if (_handlerContainers == null)
-                _handlerContainers = new List<IHandlerExecutionContainer>();
+            if (_handlers == null)
+                _handlers = new List<IHandlerExecutionContainer>();
 
-            _handlerContainers.Add(handlerExecutionContainer);
+            _handlers.Add(handlerExecutionContainer);
         }
 
-        public PipelineOutput<object> Execute(object obj, PipelineErrorHandler handler)
+        public PipelineOutput<object> Execute(object obj, ServiceContainer services)
         {
-            //Execute filters
-            var output = ExecuteFilters(obj, handler);
+            //Get filter invoker and eror handler from service container
+            var filterInvokerService = services.GetFilterContainerInvoker();
+            var pipelineErrorHandler = services.GetErrorHandler();
+
+            //Invoke filters
+            var output = filterInvokerService.Invoke(obj, _filters, pipelineErrorHandler);
             if(!output.IsCompleted)
                 return output;
 
-            //Execute job
-            output = _jobExecutionContainer.Execute(obj, handler);
+            //Get job invoker from service container
+            var jobInvoker = services.GetJobContainerInvoker();
+
+            //Invoke job container
+            output = jobInvoker.Invoke(obj, _jobContainer, pipelineErrorHandler);
             if (!output.IsCompleted)
                 return output;
 
-            //Execute handlers
-            var handlersOutput = ExecuteHandlers(output.Result, handler);
+            //Get handlers invoker from service container
+            var handlerInvokerService = services.GetHandlerContainerInvoker();
+
+            //Invoke handlers
+            var handlersOutput = handlerInvokerService.Invoke(output.Result, _handlers, pipelineErrorHandler);
 
             return 
                 handlersOutput.IsCompleted 
                     ? output
                     : handlersOutput;
-        }
-
-        private PipelineOutput<object> ExecuteFilters(object obj, PipelineErrorHandler errorHandler)
-        {
-            if(_filterContainers == null)
-                return new PipelineOutput<object>(OutputStatus.Completed);
-
-            foreach (var filterContainer in _filterContainers)
-            {
-                var output = filterContainer.Execute(obj, errorHandler);
-                if (!output.IsCompleted)
-                    return new PipelineOutput<object>(output.Status);
-            }
-
-            return new PipelineOutput<object>(OutputStatus.Completed);
-        }
-
-        private PipelineOutput<object> ExecuteHandlers(object obj, PipelineErrorHandler errorHandler)
-        {
-            if(_handlerContainers == null)
-                return new PipelineOutput<object>(OutputStatus.Completed);
-
-            foreach (var handlerContainer in _handlerContainers)
-            {
-                var output = handlerContainer.Execute(obj, errorHandler);
-                if (!output.IsCompleted)
-                    return new PipelineOutput<object>(output.Status);
-            }
-
-            return new PipelineOutput<object>(OutputStatus.Completed);
         }
     }
 }

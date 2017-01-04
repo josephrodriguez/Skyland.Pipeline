@@ -40,16 +40,24 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Internal\Containers\IFilterExecutionContainer.cs" />
-    <Compile Include="Internal\Containers\IHandlerExecutionContainer.cs" />
-    <Compile Include="Internal\Containers\IJobExecutionContainer.cs" />
+    <Compile Include="Extensions\ServicesExtension.cs" />
+    <Compile Include="IFilterExecutionContainerInvoker.cs" />
+    <Compile Include="IHandlerExecutionContainersInvoker.cs" />
+    <Compile Include="IFilterExecutionContainer.cs" />
+    <Compile Include="IHandlerExecutionContainer.cs" />
+    <Compile Include="IJobExecutionContainer.cs" />
     <Compile Include="Delegates\PipelineErrorHandler.cs" />
     <Compile Include="Exceptions\PipelineException.cs" />
     <Compile Include="FluentStageConfiguration.cs" />
+    <Compile Include="IJobExecutionContainerInvoker.cs" />
     <Compile Include="Internal\Components\IStageComponentBuilder.cs" />
     <Compile Include="Internal\Components\StageComponentBuilder.cs" />
     <Compile Include="Internal\Containers\FilterExecutionContainer.cs" />
     <Compile Include="Internal\Containers\HandlerExecutionContainer.cs" />
+    <Compile Include="Internal\DefaultFilterContainerInvoker.cs" />
+    <Compile Include="Internal\DefaultHandlerContainerInvoker.cs" />
+    <Compile Include="Internal\DefaultJobContainerInvoker.cs" />
+    <Compile Include="Internal\DefaultServiceContainer.cs" />
     <Compile Include="Internal\Enums\OutputStatus.cs" />
     <Compile Include="Components\IFilterComponent.cs" />
     <Compile Include="Components\IHandlerComponent.cs" />
@@ -70,6 +78,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ServiceContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

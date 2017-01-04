@@ -7,6 +7,7 @@ using Skyland.Pipeline.Components;
 using Skyland.Pipeline.Exceptions;
 using Skyland.Pipeline.Internal.Components;
 using Skyland.Pipeline.Internal.Containers;
+using Skyland.Pipeline.Internal.Interfaces;
 using Skyland.Pipeline.Properties;
 
 #endregion

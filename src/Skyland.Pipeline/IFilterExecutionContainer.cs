@@ -4,7 +4,7 @@ using Skyland.Pipeline.Delegates;
 
 #endregion
 
-namespace Skyland.Pipeline.Internal.Containers
+namespace Skyland.Pipeline.Internal.Interfaces
 {
     /// <summary>
     /// 

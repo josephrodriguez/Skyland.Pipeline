@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Skyland.Pipeline.Delegates;
 using Skyland.Pipeline.Exceptions;
+using Skyland.Pipeline.Internal;
 using Skyland.Pipeline.Internal.Components;
 using Skyland.Pipeline.Properties;
 
@@ -20,21 +21,22 @@ namespace Skyland.Pipeline
     {
         private readonly IList<IStageComponent> _stages;
 
-        private PipelineErrorHandler _errorHandler;
+        private readonly ServiceContainer _serviceContainer;
 
         private Pipeline()
         {
             _stages = new List<IStageComponent>();
+            _serviceContainer = new DefaultServiceContainer();
         }
 
-        private void Register(IStageComponent stageComponent)
+        private void RegisterComponent(IStageComponent stageComponent)
         {
             _stages.Add(stageComponent);
         }
 
-        private void Register(PipelineErrorHandler errorHandler)
+        private void RegisterService(Type serviceType, object service)
         {
-            _errorHandler += errorHandler;
+            _serviceContainer.Replace(serviceType, service);
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace Skyland.Pipeline
 
             foreach (var stage in _stages)
             {
-                var output = stage.Execute(currentObj, _errorHandler);
+                var output = stage.Execute(currentObj, _serviceContainer);
                 if (output.IsCompleted)
                     currentObj = output.Result;
                 else
@@ -65,8 +67,7 @@ namespace Skyland.Pipeline
         public class Builder
         {
             private Type _currentOutputType;
-
-            private PipelineErrorHandler _errorHandler;
+            private IDictionary<Type, object> _services; 
 
             private readonly IList<IStageComponentBuilder> _builders;
 
@@ -76,6 +77,7 @@ namespace Skyland.Pipeline
             public Builder()
             {
                 _builders = new List<IStageComponentBuilder>();
+                _services = new Dictionary<Type, object>();
             }
 
             /// <summary>
@@ -113,9 +115,30 @@ namespace Skyland.Pipeline
                 if(errorHandler == null)
                     throw new ArgumentNullException(nameof(errorHandler));
 
-                //Subscribe error handler for current builders
-                _errorHandler += errorHandler;
+                if (_services.ContainsKey(typeof (PipelineErrorHandler)))
+                {
+                    //Get error handler
+                    var handler = _services[typeof (PipelineErrorHandler)] as PipelineErrorHandler;
+                    handler += errorHandler;
 
+                    //Update pipeline error handler on services
+                    _services[typeof (PipelineErrorHandler)] = handler;
+                }
+                else
+                    _services[typeof (PipelineErrorHandler)] = errorHandler;
+
+                return this;
+            }
+
+            /// <summary>
+            /// Services the specified service type.
+            /// </summary>
+            /// <param name="serviceType">Type of the service.</param>
+            /// <param name="service">The service.</param>
+            /// <returns></returns>
+            public Builder Service(Type serviceType, object service)
+            {
+                _services[serviceType] = service;
                 return this;
             }
 
@@ -133,15 +156,13 @@ namespace Skyland.Pipeline
 
                 var pipeline = new Pipeline<TInput, TOutput>();
 
-                //Create components from builders
+                //Register component from builders
                 foreach (var builder in _builders)
-                {
-                    var stage = builder.Build();
-                    pipeline.Register(stage);
-                }
+                    pipeline.RegisterComponent(builder.Build());
 
-                if(_errorHandler != null)
-                    pipeline.Register(_errorHandler);
+                //Register services 
+                foreach (var servicePair in _services)
+                    pipeline.RegisterService(servicePair.Key, servicePair.Value);
 
                 return pipeline;
             }
