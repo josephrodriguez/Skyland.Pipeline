@@ -6,6 +6,7 @@
 
 using System;
 using Skyland.Pipeline.Components;
+using Skyland.Pipeline.Components.Job;
 
 namespace Skyland.Pipeline.NUnit.Jobs
 {

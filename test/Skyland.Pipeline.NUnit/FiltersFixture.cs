@@ -3,6 +3,7 @@
 using System;
 using NUnit.Framework;
 using Skyland.Pipeline.Components;
+using Skyland.Pipeline.Components.Filters;
 using Skyland.Pipeline.NUnit.Classes;
 
 #endregion

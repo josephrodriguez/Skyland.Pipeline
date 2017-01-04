@@ -1,4 +1,6 @@
-﻿namespace Skyland.Pipeline.Delegates
+﻿using Skyland.Pipeline.Components.Stages;
+
+namespace Skyland.Pipeline.Delegates
 {
     /// <summary>
     /// 

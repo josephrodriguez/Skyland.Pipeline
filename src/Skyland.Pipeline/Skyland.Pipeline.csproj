@@ -41,44 +41,44 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ServicesExtension.cs" />
-    <Compile Include="IFilterExecutionContainerInvoker.cs" />
-    <Compile Include="IHandlerExecutionContainersInvoker.cs" />
-    <Compile Include="IFilterExecutionContainer.cs" />
-    <Compile Include="IHandlerExecutionContainer.cs" />
-    <Compile Include="IJobExecutionContainer.cs" />
+    <Compile Include="Services\IFilterExecutionContainerInvoker.cs" />
+    <Compile Include="Services\IHandlerExecutionContainersInvoker.cs" />
+    <Compile Include="Containers\IFilterExecutionContainer.cs" />
+    <Compile Include="Containers\IHandlerExecutionContainer.cs" />
+    <Compile Include="Containers\IJobExecutionContainer.cs" />
     <Compile Include="Delegates\PipelineErrorHandler.cs" />
     <Compile Include="Exceptions\PipelineException.cs" />
-    <Compile Include="FluentStageConfiguration.cs" />
-    <Compile Include="IJobExecutionContainerInvoker.cs" />
-    <Compile Include="Internal\Components\IStageComponentBuilder.cs" />
-    <Compile Include="Internal\Components\StageComponentBuilder.cs" />
-    <Compile Include="Internal\Containers\FilterExecutionContainer.cs" />
-    <Compile Include="Internal\Containers\HandlerExecutionContainer.cs" />
-    <Compile Include="Internal\DefaultFilterContainerInvoker.cs" />
-    <Compile Include="Internal\DefaultHandlerContainerInvoker.cs" />
-    <Compile Include="Internal\DefaultJobContainerInvoker.cs" />
-    <Compile Include="Internal\DefaultServiceContainer.cs" />
-    <Compile Include="Internal\Enums\OutputStatus.cs" />
-    <Compile Include="Components\IFilterComponent.cs" />
-    <Compile Include="Components\IHandlerComponent.cs" />
-    <Compile Include="Components\IJobComponent.cs" />
-    <Compile Include="Internal\Components\InlineFilterComponent.cs" />
-    <Compile Include="Internal\Components\InlineHandlerComponent.cs" />
-    <Compile Include="Internal\Components\InlineJobComponent.cs" />
-    <Compile Include="Internal\Components\IStageComponent.cs" />
-    <Compile Include="Internal\Containers\JobExecutionContainer.cs" />
+    <Compile Include="Components\Stages\FluentStageConfiguration.cs" />
+    <Compile Include="Services\IJobExecutionContainerInvoker.cs" />
+    <Compile Include="Components\Stages\IStageComponentBuilder.cs" />
+    <Compile Include="Components\Stages\StageComponentBuilder.cs" />
+    <Compile Include="Containers\Impl\FilterExecutionContainer.cs" />
+    <Compile Include="Containers\Impl\HandlerExecutionContainer.cs" />
+    <Compile Include="Services\Impl\DefaultFilterContainerInvoker.cs" />
+    <Compile Include="Services\Impl\DefaultHandlerContainerInvoker.cs" />
+    <Compile Include="Services\Impl\DefaultJobContainerInvoker.cs" />
+    <Compile Include="Services\Impl\DefaultServiceContainer.cs" />
+    <Compile Include="Enums\OutputStatus.cs" />
+    <Compile Include="Components\Filters\IFilterComponent.cs" />
+    <Compile Include="Components\Handlers\IHandlerComponent.cs" />
+    <Compile Include="Components\Job\IJobComponent.cs" />
+    <Compile Include="Components\Filters\InlineFilterComponent.cs" />
+    <Compile Include="Components\Handlers\InlineHandlerComponent.cs" />
+    <Compile Include="Components\Job\InlineJobComponent.cs" />
+    <Compile Include="Components\Stages\IStageComponent.cs" />
+    <Compile Include="Containers\Impl\JobExecutionContainer.cs" />
     <Compile Include="Delegates\FluentStageConfigurator.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="PipelineOutput.cs" />
     <Compile Include="IPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Internal\Components\StageComponent.cs" />
+    <Compile Include="Components\Stages\StageComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ServiceContainer.cs" />
+    <Compile Include="Services\ServiceContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

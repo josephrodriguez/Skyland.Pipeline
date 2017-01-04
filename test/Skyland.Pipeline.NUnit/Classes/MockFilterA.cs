@@ -1,6 +1,7 @@
 ﻿#region using
 
 using Skyland.Pipeline.Components;
+using Skyland.Pipeline.Components.Filters;
 
 #endregion
 

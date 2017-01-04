@@ -6,7 +6,7 @@
 
 #region using
 
-using Skyland.Pipeline.Internal.Enums;
+using Skyland.Pipeline.Enums;
 
 #endregion
 

@@ -2,11 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using Skyland.Pipeline.Components.Stages;
 using Skyland.Pipeline.Delegates;
 using Skyland.Pipeline.Exceptions;
-using Skyland.Pipeline.Internal;
-using Skyland.Pipeline.Internal.Components;
 using Skyland.Pipeline.Properties;
+using Skyland.Pipeline.Services;
+using Skyland.Pipeline.Services.Impl;
 
 #endregion
 
